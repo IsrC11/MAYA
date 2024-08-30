@@ -1,6 +1,7 @@
 # Autimated-Analysis-of-Structure-Multiple-Property-Relationships
-
-[Google Colab](https://colab.research.google.com/drive/17SSd2BuBfMffRJKJwfYrDPwK3khvvAIj?usp=sharing)
+<div align='center'>
+  
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/17SSd2BuBfMffRJKJwfYrDPwK3khvvAIj?usp=sharing)
 <p align='center'>
 >Kappa is designed to automatically construct a chemical multiverse, generating multiple visualizations of chemical spaces described by structural descriptors such as MACCS keys (166 bits), ECFP 4 and 6, and molecular descriptors with pharmaceutical relevance, as well as implementing biological descriptors. These representations are integrated with various visualization techniques for automated analysis, focusing on the structure-multiple property relationship.
 

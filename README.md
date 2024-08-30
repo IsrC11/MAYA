@@ -22,4 +22,16 @@ You can customize the descriptors and techniques used depending on the required 
 <p align='justify'>
 Access to well-documented code is provided, covering database curation processes, similarity calculations, and dimensionality reduction techniques.
 
-</p>
+##### Additional Information
+<p align='justify'>
+MAYA current supports Pythob 3.10
+
+rdkit (2022.09.05)
+
+matplotlib (3.7.1)
+
+pandas (2.1.4)
+
+seaborn (0.13.1)
+
+sklearn (1.3.2)

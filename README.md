@@ -38,6 +38,10 @@ You can customize the descriptors and techniques used depending on the required 
 <p align='justify'>
 Access to well-documented code is provided, covering database curation processes, similarity calculations, and dimensionality reduction techniques.
 
+### Usage
+1. Google Colaboratory <br> The easiest way to use the script is ti open it in Google Colab. The only thing needed is a Google account.
+2. Local installation <br> You can also setup your own loclal Python environment if you do not want to run the script through a Google service.
+
 ### Additional Information
 <p align='justify'>
 MAYA current supports Pythob 3.10

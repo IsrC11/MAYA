@@ -13,8 +13,9 @@
 MAYA is developed as a user-friendly, open-source tool that automates the construction of chemical spaces by integrating different representations to provide a more comprehensive description of the structural, chemical, and functional characteristics of a set of molecules described by their SMILES notation and an associated activity/property, supporting various file types (CSV, TSV, XLSX, JSON and XML), requiring only the specification of a few parameters related to the database in use and the desired representations. Additionally, it includes options for customizing the visualizations.
 <p align='justify'>
 The generated visualizations are interactive, allowing for a better understanding of the displayed data. They provide a 2D view of the structure, as well as the obtained variability values and their SMILES notation. Customization features are included, enabling the modification of the data's size, shape, and transparency, as well as the ability to change the color palette.
+
+##### Why use MAYA?
 <p align='justify'>
-Why use MAYA?
 To perform an automated analysis of your database annotated with any activity, property, or score by constructing a chemical multiverse focused on a deeper understanding of multiple structure-activity relationships. 
 <p align='justify'>
 You can customize the descriptors and techniques used depending on the required focus. You can select which descriptors you want to use, and you can also input a similarity matrix of any desired descriptor, allowing its integration into the generated visualizations.

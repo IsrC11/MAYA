@@ -14,7 +14,7 @@ MAYA is developed as a user-friendly, open-source tool that automates the constr
 <p align='justify'>
 The generated visualizations are interactive, allowing for a better understanding of the displayed data. They provide a 2D view of the structure, as well as the obtained variability values and their SMILES notation. Customization features are included, enabling the modification of the data's size, shape, and transparency, as well as the ability to change the color palette.
 
-##### Why use MAYA?
+### Why use MAYA?
 <p align='justify'>
 To perform an automated analysis of your database annotated with any activity, property, or score by constructing a chemical multiverse focused on a deeper understanding of multiple structure-activity relationships. 
 <p align='justify'>
@@ -22,7 +22,7 @@ You can customize the descriptors and techniques used depending on the required 
 <p align='justify'>
 Access to well-documented code is provided, covering database curation processes, similarity calculations, and dimensionality reduction techniques.
 
-##### Additional Information
+### Additional Information
 <p align='justify'>
 MAYA current supports Pythob 3.10
 
@@ -35,3 +35,6 @@ pandas (2.1.4)
 seaborn (0.13.1)
 
 sklearn (1.3.2)
+
+### Funding
+Research contained in this package was supported by the Consejo Nacional de Humanidades, Ciencia y Tecnología (CONAHCYT) for the scholarship No. CVU 1340927

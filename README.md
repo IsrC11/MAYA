@@ -14,6 +14,22 @@ MAYA is developed as a user-friendly, open-source tool that automates the constr
 <p align='justify'>
 The generated visualizations are interactive, allowing for a better understanding of the displayed data. They provide a 2D view of the structure, as well as the obtained variability values and their SMILES notation. Customization features are included, enabling the modification of the data's size, shape, and transparency, as well as the ability to change the color palette.
 
+<p align='justify'>
+The script consist in a funtion that automatically implement:
+  
+1. Data curation
+2. Descriptors calculation
+3. Tanimoto simmilarity calculation
+4. Dimensionality reduction
+5. 2D interactive visualization
+
+The user only need to asign some variables related to the dataset:
+
+1. Name of the ID column
+2. Name of the SMILE column
+3. Name of Activity/Property columns
+4. Define the descriptors and kind of visualization are required
+
 ### Why use MAYA?
 <p align='justify'>
 To perform an automated analysis of your database annotated with any activity, property, or score by constructing a chemical multiverse focused on a deeper understanding of multiple structure-activity relationships. 

@@ -4,7 +4,7 @@
 
 >Kappa is designed to automatically construct a chemical multiverse, generating multiple visualizations of chemical spaces described by structural descriptors such as MACCS keys (166 bits), ECFP 4 and 6, and molecular descriptors with pharmaceutical relevance, as well as implementing biological descriptors. These representations are integrated with various visualization techniques for automated analysis, focusing on the structure-multiple property relationship.
 
-![Process]()
+![Process](https://github.com/ApSirius/Autimated-Analysis-of-Structure-Multiple-Property-Relationships/blob/43653ea2ebd926bd848c2588d34089323ec8a398/Chemical%20multiverse.png)
 ---
 
 Kappa is developed as a user-friendly, open-source tool that automates the construction of chemical spaces by integrating different representations to provide a more comprehensive description of the structural, chemical, and functional characteristics of a set of molecules described by their SMILES notation and an associated activity/property.

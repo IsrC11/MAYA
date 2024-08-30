@@ -1,4 +1,4 @@
-# Autimated-Analysis-of-Structure-Multiple-Property-Relationships
+# MAYA
 <div align='center'>
   
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/17SSd2BuBfMffRJKJwfYrDPwK3khvvAIj?usp=sharing)

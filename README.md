@@ -7,7 +7,7 @@
 
 ![Process](https://github.com/ApSirius/Autimated-Analysis-of-Structure-Multiple-Property-Relationships/blob/d35816f1e1c1e1da9aa98790b7fc91065f5f6162/Chemical%20multiverse.png)
 ---
-
+</div>
 Kappa is developed as a user-friendly, open-source tool that automates the construction of chemical spaces by integrating different representations to provide a more comprehensive description of the structural, chemical, and functional characteristics of a set of molecules described by their SMILES notation and an associated activity/property.
 
 Kappa supports various file types (CSV, SDF, XLSX...), requiring only the specification of a few parameters related to the database in use and the desired representations. Additionally, it includes options for customizing the visualizations.

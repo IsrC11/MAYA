@@ -25,11 +25,26 @@ The script consist in a funtion that automatically implement:
 
 The user only need to asign some variables related to the dataset:
 
-1. Name of the ID column
-2. Name of the SMILE column
-3. Name of Activity/Property columns
-4. Define the descriptors and kind of visualization are required
+1. dataset - File name and path
+2. ID - Name of ID column
+3. smiles_column_name - Name of the SMILES column
+4. targets_activity[] - A list that collects the name of all the columns with activity/property value of each target
+5. MACCS: Define as Truse or False depending on if it is required
+6. ECFP: Define as True or False depending on if it is required
+7. Enlist 6 molecular descriptors, molecular weight (MH), partition coefficient (LogP), topological polar surface area (TPSA), number o hydrogen bond donors (HBA), number of hydrogen bond acceptor (HBD) and number of rotable bond (RB)
+8. vPCA: To generate visualizations using PCA 
+9. t-SNE: To generate visualizations using t-SNE
 
+### How use MAYA?
+
+>[!IMPORTANT]
+>Depending of the interest of the user it is possible select the descriptors and dimensionality reduction thecniques to use. Defining the variables as True or False is possible disable their calculation.
+### Ejemplo de Código
+
+```markdown
+# This is an example
+chemical_multiverse(file='/content/example.csv', smiles_column_name='SMILES', target_activities=['Target_1', 'Target_2', 'Target_3'], MACCS=Falce, ECFP=True, MD=Falce, vPCA=True, t-SNE=True )
+```
 ### Why use MAYA?
 <p align='justify'>
 To perform an automated analysis of your database annotated with any activity, property, or score by constructing a chemical multiverse focused on a deeper understanding of multiple structure-activity relationships. 

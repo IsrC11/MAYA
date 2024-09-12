@@ -55,7 +55,7 @@ Access to well-documented code is provided, covering database curation processes
 
 ### Usage
 1. Google Colaboratory <br> The easiest way to use the script is ti open it in Google Colab. The only thing needed is a Google account.
-2. Local installation <br> You can also setup your own loclal Python environment if you do not want to run the script through a Google service.
+2. Local installation <br> You can also setup your own local environment if you do not want to run the script through a Google service.
 
 ### Additional Information
 <p align='justify'>

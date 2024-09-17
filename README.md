@@ -39,7 +39,7 @@ The user only need to asign some variables related to the dataset:
 
 >[!IMPORTANT]
 >Depending of the interest of the user it is possible select the descriptors and dimensionality reduction thecniques to use. Defining the variables as True or False is possible disable their calculation.
-### Ejemplo de Código
+### Example
 
 ```markdown
 # This is an example

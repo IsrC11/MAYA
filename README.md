@@ -33,7 +33,7 @@ The script consist in a funtion that automatically implement:
 # This is an example
 chemical_multiverse(file='/content/example.csv', smiles_column_name='SMILES', target_activities=['Target_1', 'Target_2', 'Target_3'], MACCS=Falce, ECFP=True, MD=Falce, vPCA=True, t-SNE=True )
 ```
-See this [notebook]() for more detailed usage
+See this [notebook](https://github.com/IsrC11/MAYA/blob/d2ca032691cf98c1ae805c567a6b4508bf5dc168/Local_usage.ipynb) for more detailed usage
 
 ### Why use MAYA?
 <p align='justify'>

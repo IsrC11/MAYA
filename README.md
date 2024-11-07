@@ -28,13 +28,14 @@ The script consist in a funtion that automatically implement:
 ### How use MAYA?
 
 >[!IMPORTANT]
->It is important to be sure our dataset contains the follow information:
+>It is essential to ensure our dataset contains the following information:
 >1. Smiles notation
->2. Identificator
->3. Value of activity or properties
->Depending of the interest of the user it is possible select the descriptors and dimensionality reduction thecniques to use. Defining the variables as True or False is possible disable their calculation.
+>2. Identifier
+>3. Activity or property values
+>
+>Depending on the user's interests, it is possible to select specific descriptors and dimensionality reduction thecniques to use. By setting variables as True or False, users can enable or disable their calculation.
 
-### Example of usage
+#### Example of usage
 ```markdown
 # This is an example
 chemical_multiverse(dataset='/content/example.csv', smiles_column_name='SMILES', target_activities=['Target_1', 'Target_2', 'Target_3'], MACCS=Falce, ECFP=True, MD=Falce, vPCA=True, t-SNE=True )

@@ -50,7 +50,7 @@ You can customize the descriptors and techniques used depending on the required 
 Access to well-documented code is provided, covering database curation processes, similarity calculations, and dimensionality reduction techniques.
 
 ### Usage
-1. Google Colaboratory <br> The easiest way to use the script is ti open it in Google Colab. The only thing needed is a Google account.
+1. Google Colaboratory <br> The easiest way to use the script is ti open it in [Google Colaboratory](https://github.com/IsrC11/MAYA/blob/d2ca032691cf98c1ae805c567a6b4508bf5dc168/Local_usage.ipynb). The only thing needed is a Google account.
 2. Local installation <br> You can also setup your own local environment if you do not want to run the script through a Google service.
 
 ### Additional Information

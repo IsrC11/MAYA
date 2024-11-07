@@ -2,17 +2,19 @@
 <div align='center'>
   
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/17SSd2BuBfMffRJKJwfYrDPwK3khvvAIj?usp=sharing)
+
+
+<p align='justify'>
+Multiple ActivitY Analyzer (MAYA) is designed to automatically construct a chemical multiverse, generating multiple visualizations of chemical spaces described by structural descriptors such as MACCS keys (166 bits), ECFP 4 and 6, molecular descriptors with pharmaceutical relevance as well as implementing biological descriptors. These representations are integrated with various visualization techniques for automated analysis, focusing on the analysis of structure - multiple activiy/property relationships (SMARTs).
+  
 <p align='center'>
-
-**MAYA** (Multiple Activity Analyzer) is designed to automatically construct a chemical multiverse, generating multiple visualizations of chemical spaces described by structural descriptors such as MACCS keys (166 bits), ECFP 4 and 6, and molecular descriptors with pharmaceutical relevance, as well as implementing biological descriptors. These representations are integrated with various visualization techniques for automated analysis, focusing on the analysis of structure - multiple activiy/property relationships.
-
-![Process](https://github.com/ApSirius/Autimated-Analysis-of-Structure-Multiple-Property-Relationships/blob/d35816f1e1c1e1da9aa98790b7fc91065f5f6162/Chemical%20multiverse.png)
----
+<img src="https://github.com/ApSirius/Autimated-Analysis-of-Structure-Multiple-Property-Relationships/blob/d35816f1e1c1e1da9aa98790b7fc91065f5f6162/Chemical%20multiverse.png" alt="Process" width="600">
+<p align='justify'>
 </div>
 <p align='justify'>
-MAYA is developed as a user-friendly, open-source tool that automates the construction of chemical spaces by integrating different representations to provide a more comprehensive description of the structural, chemical, and functional characteristics of a set of molecules described by their SMILES notation and an associated activity/property, supporting various file types (CSV, TSV, XLSX, JSON and XML), requiring only the specification of a few parameters related to the database in use and the desired representations. Additionally, it includes options for customizing the visualizations.
+MAYA has been developing as a user-friendly, open-source tool that automates the construction of chemical spaces by integrating diverse molecular representations to provide a more comprehensive description of the structural, chemical, and functional characteristics of a given set of molecules described by their SMILES notation and an associated activity/property, and the tool supports various file formats (CSV, TSV, XLSX, JSON and XML), requiring only the specification of a few parameters related to the database in use and the desired representations. Additionally, MAYA includes options for customizing the visualizations.
 <p align='justify'>
-The generated visualizations are interactive, allowing for a better understanding of the displayed data. They provide a 2D view of the structure, as well as the obtained variability values and their SMILES notation. Customization features are included, enabling the modification of the data's size, shape, and transparency, as well as the ability to change the color palette.
+The generated visualizations are interactive, enhancing the understanding of the displayed data. They offer a 2D view of the molecular structure, along with the obtained variability values from PCA and their SMILES notation. Customization features allow users to adjust the size, shape, and transparency of data points, as well as the ability to modify the color palette.
 
 <p align='justify'>
 The script consist in a funtion that automatically implement:
@@ -26,12 +28,16 @@ The script consist in a funtion that automatically implement:
 ### How use MAYA?
 
 >[!IMPORTANT]
+>It is important to be sure our dataset contains the follow information:
+>1. Smiles notation
+>2. Identificator
+>3. Value of activity or properties
 >Depending of the interest of the user it is possible select the descriptors and dimensionality reduction thecniques to use. Defining the variables as True or False is possible disable their calculation.
-### Example
 
+### Example of usage
 ```markdown
 # This is an example
-chemical_multiverse(file='/content/example.csv', smiles_column_name='SMILES', target_activities=['Target_1', 'Target_2', 'Target_3'], MACCS=Falce, ECFP=True, MD=Falce, vPCA=True, t-SNE=True )
+chemical_multiverse(dataset='/content/example.csv', smiles_column_name='SMILES', target_activities=['Target_1', 'Target_2', 'Target_3'], MACCS=Falce, ECFP=True, MD=Falce, vPCA=True, t-SNE=True )
 ```
 See this [notebook](https://github.com/IsrC11/MAYA/blob/d2ca032691cf98c1ae805c567a6b4508bf5dc168/Local_usage.ipynb) for more detailed usage
 

@@ -25,7 +25,7 @@ The script consist in a funtion that automatically implement:
 4. Dimensionality reduction
 5. 2D interactive visualization
 
-[Here](), you can find more detailed information about how MAYA works 
+[Here](https://github.com/IsrC11/MAYA/blob/ab6969279ae6096e20aaa0570ab54dec6059d31e/Basic_Usage.md), you can find more detailed information about how MAYA works 
 
 ### How use MAYA?
 
@@ -42,7 +42,7 @@ The script consist in a funtion that automatically implement:
 # This is an example
 chemical_multiverse(dataset='/content/example.csv', smiles_column_name='SMILES', target_activities=['Target_1', 'Target_2', 'Target_3'], MACCS=Falce, ECFP=True, MD=Falce, vPCA=True, t-SNE=True )
 ```
-See this [notebook](https://github.com/IsrC11/MAYA/blob/d2ca032691cf98c1ae805c567a6b4508bf5dc168/Local_usage.ipynb) for more detailed usage
+See this [notebook](https://github.com/IsrC11/MAYA/blob/ab6969279ae6096e20aaa0570ab54dec6059d31e/Basic_Usage.md) for more detailed usage
 
 ### Why use MAYA?
 <p align='justify'>

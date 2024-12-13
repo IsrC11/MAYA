@@ -8,8 +8,7 @@ Original file is located at
 
 # Multiple Activity Analyzer (MAYA)
 
-"""# Funtion"""
-
+"""
 def chemical_multiverse(dataset=None, ID=None, smiles_column_name=None, target_activities=[None], vPCA=True, t_SNE=True, MACCS=True, ECFP=True, radius=3, druglikeness_descriptors=True, signaturizer_code=['B1','B4', 'C1', 'C2', 'E4', 'E5'], palette='RdBu_r', perplexity=33, size_point=12.0, size_point_representation='normal_desviation', evaluation_metric='mpIC50_value', metric_name='mpIC50',  point_shape='circle'):
 
    """
@@ -640,8 +639,3 @@ def chemical_multiverse(dataset=None, ID=None, smiles_column_name=None, target_a
                 serve_kernel_port_as_iframe("localhost")
                 app_maker.run(port=8072)
                 pio.write_image(fig_tsne_signaturizer, f'fig_tsne_{code}_high_res.png', scale=10, width=1200, height=900)
-
-"""# Example"""
-
-chemical_multiverse(dataset='/content/study_case_1.xlsx', smiles_column_name='Smiles', ID='molecule_chembl_id', target_activities=['IC50_Target_1', 'IC50_Target_2'], perplexity=15, size_point_representation='size_point_RB', evaluation_metric='IC50_Target_1 - IC50_Target_2', metric_name='Overall_Activity')
-

@@ -44,9 +44,12 @@ The dataset must be annotated with SMILES notation and include at least 1 activi
 <p align='justify'>
    
 ##### **radius**  
+<p align='justify'>
+
 Defined as the radius of the circle centered on each atom within a molecule. Typically this radius corresponds to 2 or 3 bonds, allowing the mapping of the immediate chemical environment of each atom. This variable is essential for capturing local chemical interactions that contribute to molecular activity.
 
 #### **size_point_representation**
+<p align='justify'>
 The default point size is 13. However, it is possible to adjust the size to represent a specific characteristic of the database. By default, the size will represent the standard deviation of activity values, indicating the variability of activity values across the multiple targets in the databases. The user can modify the characteristic to be represented by defining the variable size_point_representation. The possible representations are as follows:
 
 1. normal_desviation: Default configuration
@@ -58,7 +61,7 @@ The default point size is 13. However, it is possible to adjust the size to repr
 7. size_point_RB: Rotable Bonds
 
 #### **signaturizer\_code**  
-A list containing the names of the different bioactive descriptors(1) used. These descriptors can be expanded or reduced depending on the analysis requirements. The included descriptors are:
+A list containing the names of the different bioactive descriptors[^1] used. These descriptors can be expanded or reduced depending on the analysis requirements. The included descriptors are:
 
 a. Level A: Chemistry  
 These descriptors are derived from the chemical structure
@@ -96,6 +99,52 @@ This flexibility allows users to tailor visualizations to specific needs or aest
 #### **perplexity**  
 The perplexity value is closely related to the resulting visualizations. This parameter represents an approximation of the number of nearest neighbors for each point, balancing the weight between local and global features in the analysis. It is recommended to set a perplexity value between 5 and 50 depending on the database size, ensuring that the value is always less than the total size of the database
 
+## Scale
+The visual representation of a property or activity is implemented to facilitate the identification of relevant patterns, differences, or trends. By default, the color scale in the graphs represents the sum of the pIC50 values if each compound's activities, defined as:
+<p align='center'>
+mpIC5o = -log(IC50(A)) + -log(IC50(A)) + ...
+<p align='justify'>
+However, the user can modify this configuration to visualizae the following properties:
+   
+1. normal_desviation: Standard deviation of each compounds's activities
+2. HBD: Hydrogen Bond Donors
+3. HBA: Hydrogen Bond Acceptors
+4. MW:Molecular Weight
+5. TPSA: Total Polar Surface Area
+6. Logp: Octanol/Water Partition Coefficient
+7. RB: Rotable bonds
+8. mpIC50: Default configuration
+
+Additionally, weighting and penalizations considerations can be implemented to enhance the analysis copabilities based on user requeriments. This allows the generation of a ranking or evaluation matric based on the activities or properties available in the database. The **evaluation_metric** and **metric_name** variables have been defined.
+
+Defining a custom metric: Users can specify how to combine activities or properties. For example, for a series of three activities (Activity_1_Colum_Name, Activity_2_Colum_Name, Activity_3_Colum_Name), where one is undesired (Activity_3_Colum_Name), it is possible to penalize it, defining **evaluation_metric**. For exmaple:
+
+```markdown
+# To penalize an undesired activity
+evaluation_metric = ('Activity_1_Colum_Name') + ('Activity_2_Colum_Name') - ('Activity_1_Colum_Name')
+```
+
+```markdown
+# To assign different weights to activities/properties
+evaluation_metric = 2 * ('Activity_1_Colum_Name') + ('Activity__Colum_Name') - ('Activity_3_Colum_Name')
+```
+
+```markdown
+# To work with logaritmic values:
+evaluation_metric = -log('Activity_1_Colum_Name') + 0.5(-log('Activity_2_Colum_Name')) - (-log('Activity_3_Colum_Name'))
+evaluation_metric = -log('Activity_1_Colum_Name' * 1000) + (-log('Activity_2_Colum_Name' * 1000)) - (-log('Activity_3_Colum_Name' * 1000))
+```
+
+>[!IMPORTANT]
+> It is necessary to  specify the column name present in the initial dataset. The implemented function relies on recognozinf these names, so it is recommended to avoid using names that may conflict with Python or Numpay reserved functions or keywords (e.g. log, sum, mean). Additionally, columns names containing special characters (such as +, -, *) should be avoided.
+>To ensure proper functionlaity, it is recommended to use only letters, numbers and underscores, avoiding spaces in column names.
+
+The name of the metric displayed in the graphs can be defined using the metric_name variable. For example:
+
+```markdown
+metric_name = 'Ranking Scale'
+```
+
 ### Quick local use for non-experts
 
 Perhaps MAYA is to run in Google Colaboratory, but if it is necessary you can download MAYA.ipynb and run in Jupythe with local resources. Also is possible clone the repository and follow these simple steps:
@@ -115,5 +164,5 @@ Now that we are in the environment we execute this comand
 ./MAYA.py dataset='/content/example.csv', smiles_column_name='SMILES', target_activities=['Target_1', 'Target_2', 'Target_3'], MACCS=False, ECFP=True, MD=False, vPCA=True, t-SNE=True
 ``` 
 
-(1)	Bertoni, M.; Duran-Frigola, M.; Badia-I-Mompel, P.; Pauls, E.; Orozco-Ruiz, M.; Guitart-Pla, O.; Alcalde, V.; Diaz, V. M.; Berenguer-Llergo, A.; Brun-Heath, I.; Villegas, N.; de Herreros, A. G.; Aloy, P. Bioactivity Descriptors for Uncharacterized Chemical Compounds. *Nat. Commun.* **2021**, *12* (1), 3932\.
+[^1]:	Bertoni, M.; Duran-Frigola, M.; Badia-I-Mompel, P.; Pauls, E.; Orozco-Ruiz, M.; Guitart-Pla, O.; Alcalde, V.; Diaz, V. M.; Berenguer-Llergo, A.; Brun-Heath, I.; Villegas, N.; de Herreros, A. G.; Aloy, P. Bioactivity Descriptors for Uncharacterized Chemical Compounds. *Nat. Commun.* **2021**, *12* (1), 3932\.
 

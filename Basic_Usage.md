@@ -102,7 +102,7 @@ The perplexity value is closely related to the resulting visualizations. This pa
 ## Scale
 The visual representation of a property or activity is implemented to facilitate the identification of relevant patterns, differences, or trends. By default, the color scale in the graphs represents the sum of the pIC50 values if each compound's activities, defined as:
 <p align='center'>
-mpIC5o = -log(IC50(A)) + -log(IC50(A)) + ...
+mpIC50 = -log(IC50(A)) + -log(IC50(A)) + ...
 <p align='justify'>
 However, the user can modify this configuration to visualizae the following properties:
    
@@ -113,7 +113,7 @@ However, the user can modify this configuration to visualizae the following prop
 5. TPSA: Total Polar Surface Area
 6. Logp: Octanol/Water Partition Coefficient
 7. RB: Rotable bonds
-8. mpIC50: Default configuration
+8. mpIC50_value: Default configuration
 
 Additionally, weighting and penalizations considerations can be implemented to enhance the analysis copabilities based on user requeriments. This allows the generation of a ranking or evaluation matric based on the activities or properties available in the database. The **evaluation_metric** and **metric_name** variables have been defined.
 

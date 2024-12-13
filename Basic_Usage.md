@@ -40,35 +40,47 @@ The dataset must be annotated with SMILES notation and include at least 1 activi
 
 16. **point\_shape** (str): User-defined variable for adjusting point shape in the plot, ‘circle’ as default
 
-### Relevance of some variables:
-
+## Relevance of some variables:
+<p align='justify'>
+   
 ##### **radius**  
 Defined as the radius of the circle centered on each atom within a molecule. Typically this radius corresponds to 2 or 3 bonds, allowing the mapping of the immediate chemical environment of each atom. This variable is essential for capturing local chemical interactions that contribute to molecular activity.
+
+#### **size_point_representation**
+The default point size is 13. However, it is possible to adjust the size to represent a specific characteristic of the database. By default, the size will represent the standard deviation of activity values, indicating the variability of activity values across the multiple targets in the databases. The user can modify the characteristic to be represented by defining the variable size_point_representation. The possible representations are as follows:
+
+1. normal_desviation: Default configuration
+2. size_point_HBA: Hydrogen Bond Acceptor
+3. size_point_LogP: Octano - Water Coefficient
+4. size_point_TPSA: Total Polar Surface Area
+5. size_point_MW: Molecular Weight
+6. size_point_HBD: Hydrogen Bond Donor
+7. size_point_RB: Rotable Bonds
 
 #### **signaturizer\_code**  
 A list containing the names of the different bioactive descriptors(1) used. These descriptors can be expanded or reduced depending on the analysis requirements. The included descriptors are:
 
-Level A: Chemistry  
+a. Level A: Chemistry  
 These descriptors are derived from the chemical structure
 
 A1: 2D fingerprints  – A2: 3D fingerprints  – A3: Scaffolds  – A4: Structural keys  –  A5: Physicochemistry
 
-Level B: Targets  
+b. Level B: Targets  
 Descriptors related to the interactions of a compound with its biomolecular target, including data from biochemical assays and databases such as ChEMBL, PubChem or BindingDB.  
    
 B1: Mechanisms of action  – B2: Metabolic genes – B3: Crystals – B4: Binding – B5: HTS bioassays
 
-Level C: Biological Networks  
+c. Level C: Biological Networks  
 Descriptors designed to characterize how compounds modulate or affect interconnected biological systems, such as metabolic networks
 
 C1: Small molecule roles – C2: Small molecule pathways – C3: Signaling pathways – C4: Biological processes
 
-Level D: Cells  
+d. Level D: Cells  
 Describes the impact of bioactive molecules on cellular processes
 
 D1: Transcription – D2: Cancer lines – D3: Chemical genetics – D4: Morphology – D5: Cell bioassays
 
-Level E: Clinic  
+e. Level E: Clinic  
 Describe the effects observed in human or animal models, including both therapeutic and side effects
 
 E1: Therapeutic areas – E2: Indications – E3: Side effects – E4: Diseases & toxicology – E5: Drug-Drug interactions

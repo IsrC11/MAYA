@@ -99,44 +99,59 @@ This flexibility allows users to tailor visualizations to specific needs or aest
 #### **perplexity**  
 The perplexity value is closely related to the resulting visualizations. This parameter represents an approximation of the number of nearest neighbors for each point, balancing the weight between local and global features in the analysis. It is recommended to set a perplexity value between 5 and 50 depending on the database size, ensuring that the value is always less than the total size of the database
 
-## Scale
-The visual representation of a property or activity is implemented to facilitate the identification of relevant patterns, differences, or trends. By default, the color scale in the graphs represents the sum of the pIC50 values if each compound's activities, defined as:
-<p align='center'>
-mpIC50 = -log(IC50(A)) + -log(IC50(A)) + ...
+## Color Scale
 <p align='justify'>
-However, the user can modify this configuration to visualizae the following properties:
+The visual representation of a property or activity is implemented to facilitate the identification of relevant patterns, differences, or trends. Additionally, weighting and penalizations considerations can be implemented to enhance the analysis copabilities based on user requeriments. This allows the generation of a ranking or evaluation matric based on the activities or properties available in the database.
+   
+The **evaluation_metric** and **metric_name** variables have been defined. By default, the color scale in the graphs represents the mean of the pIC50 values if each compound's activities, defined as:
+<p align='center'>
+mpIC50 = -log(IC50(A)) + -log(IC50(B)) + ... / n
+
+However, the user can modify this configuration changing the asignation of the variable **evaluation_metric** to visualizae the following properties:
    
 1. normal_desviation: Standard deviation of each compounds's activities
 2. HBD: Hydrogen Bond Donors
 3. HBA: Hydrogen Bond Acceptors
 4. MW:Molecular Weight
 5. TPSA: Total Polar Surface Area
-6. Logp: Octanol/Water Partition Coefficient
+6. cLogP: Calculated Octanol/Water Partition Coefficient
 7. RB: Rotable bonds
 8. mpIC50_value: Default configuration
 
-Additionally, weighting and penalizations considerations can be implemented to enhance the analysis copabilities based on user requeriments. This allows the generation of a ranking or evaluation matric based on the activities or properties available in the database. The **evaluation_metric** and **metric_name** variables have been defined.
+```markdown
+# Defaul configuration
+evaluation_metric = 'mpIC50_value', metric_name = 'mpIC50'
+```
+```markdown
+# Example
+evaluation_metric = 'MW', metric_name = 'Molecular Weight'
+```
+
+
+>[!NOTE]
+> Both variables accept strign values.
 
 Defining a custom metric: Users can specify how to combine activities or properties. For example, for a series of three activities (Activity_1_Colum_Name, Activity_2_Colum_Name, Activity_3_Colum_Name), where one is undesired (Activity_3_Colum_Name), it is possible to penalize it, defining **evaluation_metric**. For exmaple:
 
 ```markdown
 # To penalize an undesired activity
-evaluation_metric = ('Activity_1_Colum_Name') + ('Activity_2_Colum_Name') - ('Activity_1_Colum_Name')
+evaluation_metric = '('Activity_1_Colum_Name') + ('Activity_2_Colum_Name') - ('Activity_1_Colum_Name')'
 ```
 
 ```markdown
 # To assign different weights to activities/properties
-evaluation_metric = 2 * ('Activity_1_Colum_Name') + ('Activity__Colum_Name') - ('Activity_3_Colum_Name')
+evaluation_metric = '2 * ('Activity_1_Colum_Name') + ('Activity__Colum_Name') - ('Activity_3_Colum_Name')'
 ```
 
 ```markdown
 # To work with logaritmic values:
-evaluation_metric = -log('Activity_1_Colum_Name') + 0.5(-log('Activity_2_Colum_Name')) - (-log('Activity_3_Colum_Name'))
-evaluation_metric = -log('Activity_1_Colum_Name' * 1000) + (-log('Activity_2_Colum_Name' * 1000)) - (-log('Activity_3_Colum_Name' * 1000))
+evaluation_metric = '-log('Activity_1_Colum_Name') + 0.5(-log('Activity_2_Colum_Name')) - (-log('Activity_3_Colum_Name'))'
+evaluation_metric = '-log('Activity_1_Colum_Name' * 1000) + (-log('Activity_2_Colum_Name' * 1000)) - (-log('Activity_3_Colum_Name' * 1000))'
 ```
 
 >[!IMPORTANT]
-> It is necessary to  specify the column name present in the initial dataset. The implemented function relies on recognozinf these names, so it is recommended to avoid using names that may conflict with Python or Numpay reserved functions or keywords (e.g. log, sum, mean). Additionally, columns names containing special characters (such as +, -, *) should be avoided.
+><p align='justify'>
+> It is necessary to  specify the column name present in the initial dataset. The implemented function relies on recognozing these names, so it is recommended to avoid using names that may conflict with Python or Numpay reserved functions or keywords (e.g. log, sum, mean). Additionally, columns names containing special characters (such as +, -, *) should be avoided.
 >To ensure proper functionlaity, it is recommended to use only letters, numbers and underscores, avoiding spaces in column names.
 
 The name of the metric displayed in the graphs can be defined using the metric_name variable. For example:

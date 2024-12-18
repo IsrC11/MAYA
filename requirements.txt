@@ -14,7 +14,8 @@ rdkit==2024.3.6
 scikit-learn==1.5.2
 scipy==1.13.1
 seaborn==0.13.2
-torch @ https://download.pytorch.org/whl/cu121_full/torch-2.5.1%2Bcu121-cp310-cp310-linux_x86_64.whl
+torch==2.1.0
 joblib==1.4.2
 Pillow==11.0.0
 signaturizer3D==0.1.8
+openpyxl==3.1.5

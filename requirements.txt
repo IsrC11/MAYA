@@ -4,7 +4,7 @@ jupyter-dash==0.4.2
 kaleido==0.2.1
 kora==0.9.20
 matplotlib==3.8.0
-molplotly==0.1.7
+molplotly==1.1.7
 molvs==0.1.1
 numpy==1.26.4
 pandas==2.2.2

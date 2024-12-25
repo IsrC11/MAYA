@@ -45,7 +45,7 @@ chemical_multiverse(dataset='/content/example.csv', smiles_column_name='SMILES',
 ```
 
 <p align='center'>
-<img src="https://github.com/IsrC11/MAYA/blob/324aefd424da8d25b9dcc5ef2caba67743437a09/Wflow.png" alt="Process" width="1000">
+<img src="https://github.com/IsrC11/MAYA/blob/44661380db69df87131c8dd5315a24debe5e6020/Example.jpg" alt="Process" width="1000">
 <p align='justify'>
 </div>
 

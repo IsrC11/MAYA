@@ -175,11 +175,12 @@ Perhaps MAYA is to run in Google Colaboratory, but if it is necessary you can do
 First we creat a new conda environment:
 ```markdown
 # Here we name this conda environment 'MAYA' but you can call it anything you like
-conda create --name MAYA --file environment.yml
+conda create --name MAYA
 ```
 We activate new conda environtment:
 ```markdown
 conda activate MAYA
+pip install -r requirements.txt
 ```
 Now that we are in the environment we execute this comand
 ```markdown

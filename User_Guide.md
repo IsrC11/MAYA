@@ -3,10 +3,14 @@
 <p align='justify'>
 This tutorial demonstrates how to use MAYA with a dataset annotated with SMILES notation and associated activity or property data to automate the analysis of SMARts patterns and generate a chemical multiverse. The purpose of this tutorial is to serve as a learning tool for using MAYA. To enhance accessibility and efficiency for the user, we simplify the code analysis and focus on practical implementation.
 
-### Set up compounds dataset  
+---
+
+### Set up compound dataset  
 <p align='justify'>
 The current version of **MAYA** supports several file types, including .CSV, .XLSX, .TSV, .XLSX, .JSON and .XML.  
-The dataset must be annotated with SMILES notation and include at least 1 activities or properties. The structure of the input is illustrated in the dataset examples. We need to define certain variables to ensure that MAYA uses the correct columns for calculations.
+The dataset must be annotated with SMILES notation, ID and include at least 1 activities or properties. The structure of the input is illustrated in the dataset examples. We need to define certain variables to ensure that MAYA uses the correct columns for calculations.
+
+#### Dataset settings
 
 1. **dataset** (CSV, XLSX, TSV, JSON, XML): DataFrame of compounds provided by the user.
 
@@ -16,6 +20,8 @@ The dataset must be annotated with SMILES notation and include at least 1 activi
 
 4. **target\_activities** (list): List with the names of columns containing target activity values.
 
+#### Calculation settings
+
 5. **vPCA** (bool): User-defined variable for applying Principal Component Analysis., defined True as default
 
 6. **t\_SNE** (bool): User-defined variable for applying t-SNE, defined True as default
@@ -24,23 +30,43 @@ The dataset must be annotated with SMILES notation and include at least 1 activi
 
 8. **ECFP** (bool): User-defined variable for applying Extended Connectivity Fingerprint calculation., defined True as default
 
-9. **radius** (int): User-defined variable for ECFP radius 2 or 3., defined 3 as default
+9. **druglikeness\_descriptors** (bool): User-defined variable for applying the 6 drug-likeness descriptors, defined True as default
 
-10. **fpsize** (int): Variable for define the size of ECFP, the number of bits, defines 2048 as default
+10. **radius** (int): User-defined variable for ECFP radius 2 or 3., defined 3 as default
 
-11. **druglikeness\_descriptors** (bool): User-defined variable for applying the 6 drug-likeness descriptors, defined True as default
+11. **fpsize** (int): Variable for define the size of ECFP, the number of bits (1024 or 2048), defines 2048 as default
 
-12. **signaturizer\_code** (list): User-defined variable for applying signaturizer with 6 different codes.
+12. **druglikeness\_descriptors** (bool): User-defined variable for applying the 6 drug-likeness descriptors, defined True as default
 
-13. **palette** (str): User-defined variable for defining a continuous color palette., ‘RdBu\_r’ as default
+13. **signaturizer\_code** (list): User-defined variable for applying signaturizer with 6 different codes.
 
-14. **perplexity** (int): User-defined variable for adjusting the proximity of points in t-SNE, depending on dataset size, defined 33 as default
+#### Visualization settings
 
-15. **size\_point** (float): User-defined variable for adjusting point size in the plot, defined 13 as default
+14. **palette** (str): User-defined variable for defining a continuous color palette., ‘RdBu\_r’ as default
 
-16. **point\_shape** (str): User-defined variable for adjusting point shape in the plot, ‘circle’ as default
+15. **size_point** (float): User-defined variable for adjusting point size in the plot, defined 13 as defaul
 
-## Relevance of some variables:
+16. **point_shape** (str): User-defined variable for adjusting point shape in the plot, ‘circle’ as default
+
+17. **size_point_representation** (str)=Variable to define the property to be visualized through the size of the point, 'normal_desviation' as default
+
+#### Color scale configuration
+
+18. **evaluation_metric**(str): Specify the property to be represented on the color scale integrared into each visualizations.
+
+19. **evaluation metric**(str): metric_name (str): User-defined variable for adjusting color scale name in the plot.
+
+#### t-SNE configuration
+
+20. **perplexity** (int): User-defined variable for adjusting the proximity of points in t-SNE, depending on dataset size, defined 33 as default
+
+21. **n_iterations** (int): Number of iterations for t-SNE.
+
+ #### Parallelize
+
+ 22. **n_jobs**(int)Number of cores to parallelize the process
+
+## Relevance of some variables
 <p align='justify'>
    
 ##### **radius**  
@@ -63,30 +89,13 @@ The default point size is 13. However, it is possible to adjust the size to repr
 #### **signaturizer\_code**  
 A list containing the names of the different bioactive descriptors[^1] used. These descriptors can be expanded or reduced depending on the analysis requirements. The included descriptors are:
 
-a. Level A: Chemistry  
-These descriptors are derived from the chemical structure
-
-A1: 2D fingerprints  – A2: 3D fingerprints  – A3: Scaffolds  – A4: Structural keys  –  A5: Physicochemistry
-
-b. Level B: Targets  
-Descriptors related to the interactions of a compound with its biomolecular target, including data from biochemical assays and databases such as ChEMBL, PubChem or BindingDB.  
-   
-B1: Mechanisms of action  – B2: Metabolic genes – B3: Crystals – B4: Binding – B5: HTS bioassays
-
-c. Level C: Biological Networks  
-Descriptors designed to characterize how compounds modulate or affect interconnected biological systems, such as metabolic networks
-
-C1: Small molecule roles – C2: Small molecule pathways – C3: Signaling pathways – C4: Biological processes
-
-d. Level D: Cells  
-Describes the impact of bioactive molecules on cellular processes
-
-D1: Transcription – D2: Cancer lines – D3: Chemical genetics – D4: Morphology – D5: Cell bioassays
-
-e. Level E: Clinic  
-Describe the effects observed in human or animal models, including both therapeutic and side effects
-
-E1: Therapeutic areas – E2: Indications – E3: Side effects – E4: Diseases & toxicology – E5: Drug-Drug interactions
+Level     |   1  |   2  |  3  |   4  |   5
+  ---     |  ---  |  ---  |  --- |  ---  |  ---
+Chemistry (A) |  2D Fingerprints  |  3D Fingerprints  |  Scaffolds |  Structural keys  |  Physicochemistry
+Targets (B)   |  Mechanisms of action  |  Metabolic genes  | Crystals |  Binding  |  HTS bioassays
+Networks (C)  | Small molecule roles | Small molecule pathways | Signaling pathways | Biological proceses | Interactome
+Cells (D)     |  Transcription  |  Cancer cell lines  | Chemical genetics | Morphology | Cell bioasssays
+Clinics (E)   | Therapeutic areas |  Indications  | Side effects |  Diseases & Toxicology |  Drug-Drug Interactions
 
 #### **palette**  
 This variable is used to modify the color palette applied in the graphs. It supports two main configurations\>
@@ -145,8 +154,7 @@ evaluation_metric = '2 * ('Activity_1_Colum_Name') + ('Activity__Colum_Name') - 
 
 ```markdown
 # To work with logaritmic values:
-evaluation_metric = '-log('Activity_1_Colum_Name') + 0.5(-log('Activity_2_Colum_Name')) - (-log('Activity_3_Colum_Name'))'
-evaluation_metric = '-log('Activity_1_Colum_Name' * 1000) + (-log('Activity_2_Colum_Name' * 1000)) - (-log('Activity_3_Colum_Name' * 1000))'
+evaluation_metric = '('Activity_1_Colum_Name' * 1000) + (('Activity_2_Colum_Name' * 1000)) - (('Activity_3_Colum_Name' * 1000))'
 ```
 
 >[!IMPORTANT]

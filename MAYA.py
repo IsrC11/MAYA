@@ -12,42 +12,6 @@ Github: https://github.com/IsrC11/MAYA.git
 
 # Modules
 """
-
-from IPython.utils import io
-import tqdm.notebook
-import os, sys, random
-total = 100
-with tqdm.notebook.tqdm(total=total) as pbar:
-    with io.capture_output() as captured:
-      # Install rdkit
-      !pip -q install rdkit
-      pbar.update(5)
-      !pip install pandas
-      #!pip install dash
-      pbar.update(10)
-      # Install Numpy
-      !pip install numpy
-      !pip install torch
-      # Instalar Pillow
-      !pip -q install Pillow
-      pbar.update(20)
-      # Install Molvs
-      !pip install -q molvs
-      !pip install kora py3Dmol
-      pbar.update(40)
-      # Install molplotly
-      !pip install molplotly
-      !pip install matplotlib
-      !pip install kaleido
-      pbar.update(60)
-      #Seaborn
-      !pip install seaborn
-      !pip install scikit-learn
-      # Install jupyter-dash
-      !pip install jupyter-dash
-      !pip install dash-bootstrap-components
-      pbar.update(100)
-
 #Dataframe
 import pandas as pd
 import numpy as np

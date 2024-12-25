@@ -8,7 +8,7 @@
 Multiple ActivitY Analyzer (MAYA) is designed to automatically construct a chemical multiverse, generating multiple visualizations of chemical spaces described by structural descriptors such as MACCS keys (166 bits), ECFP 4 and 6, molecular descriptors with pharmaceutical relevance as well as implementing biological descriptors. These representations are integrated with various visualization techniques for automated analysis, focusing on the analysis of structure - multiple activiy/property relationships (SMARTs).
   
 <p align='center'>
-<img src="https://github.com/IsrC11/MAYA/blob/070e283ff80c8e818be406933daa7206fd3cb6c0/Workflow-1.png" alt="Process" width="1000">
+<img src="https://github.com/IsrC11/MAYA/blob/324aefd424da8d25b9dcc5ef2caba67743437a09/Wflow.png" alt="Process" width="1000">
 <p align='justify'>
 </div>
 <p align='justify'>

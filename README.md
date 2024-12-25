@@ -41,7 +41,15 @@ The script consist in a funtion that automatically implement:
 ```markdown
 # This is an example
 chemical_multiverse(dataset='/content/example.csv', smiles_column_name='SMILES', target_activities=['Target_1', 'Target_2', 'Target_3'], MACCS=Falce, ECFP=True, MD=Falce, vPCA=True, t-SNE=True )
+
 ```
+
+<p align='center'>
+<img src="https://github.com/IsrC11/MAYA/blob/324aefd424da8d25b9dcc5ef2caba67743437a09/Wflow.png" alt="Process" width="1000">
+<p align='justify'>
+</div>
+
+
 See this [notebook](https://github.com/IsrC11/MAYA/blob/cc7d8d7f59947269491ba37b3f772eeca4d81741/User_Guide.md) for more detailed usage
 
 ### Why use MAYA?

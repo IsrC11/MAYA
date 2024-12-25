@@ -25,7 +25,7 @@ The script consist in a funtion that automatically implement:
 4. Dimensionality reduction
 5. 2D interactive visualization
 
-[Here](https://github.com/IsrC11/MAYA/blob/cc7d8d7f59947269491ba37b3f772eeca4d81741/User_Guide.md), you can find more detailed information about how MAYA works 
+[Here](https://github.com/IsrC11/MAYA/blob/cc7d8d7f59947269491ba37b3f772eeca4d81741/User_Guide.md) you can find more detailed information about how MAYA works 
 
 ### How use MAYA?
 

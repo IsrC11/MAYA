@@ -1,70 +1,139 @@
 # **Basic Usage**
 
 <p align='justify'>
-This tutorial demonstrates how to use MAYA with a dataset annotated with SMILES notation and associated activity or property data to automate the analysis of SMARts patterns and generate a chemical multiverse. The purpose of this tutorial is to serve as a learning tool for using MAYA. To enhance accessibility and efficiency for the user, we simplify the code analysis and focus on practical implementation.
+MAYA is a tool designed to automate the construction and visualization of a chemical multiverse from a set of compounds. It enables multiple similarity calculations, dimensionality reduction (PCA and t-SNE), and interactive visualizations based on chemical descriptors and biological activities.
+
+*Key Features*
+
+1. **SMILES Preprocessing**: Normalization and validation of SMILES.
+2. **Similatity Calculation**: Use of MACCS, ECFP, and MAP4 to calculate similaties between compounds.
+3. **Dimensionality Reduction**: Aplication of PCA and t-SNE for 2D visualization.
+4. **Interactive Visualization**: Interactive plots with detailed information for each compound.
+5. **Descriptor Calculation**: Drug-likeness descriptors and chemical signatures (signaturizer).
 
 ---
 
-### Set up compound dataset  
+### Dataset Configuration  
 <p align='justify'>
-The current version of **MAYA** supports several file types, including .CSV, .XLSX, .TSV, .XLSX, .JSON and .XML.  
-The dataset must be annotated with SMILES notation, ID and include at least 1 activities or properties. The structure of the input is illustrated in the dataset examples. We need to define certain variables to ensure that MAYA uses the correct columns for calculations.
+ 
+>[!NOTE]
+>The dataset must be annotated with SMILES notation, a unique idenntifier (ID), and at least one activity or property. Supported formats include: CSV, XLSX, TSV, JSON, XML.
 
-#### Dataset settings
+Comp_ID   |    Smiles    |    Activity_1
+ :---:      |     :---:      |      :---:
+Comp_137  |  NC(=O)c1cccc(c1)c2cnc3[nH]cc(c4ccccc4)c3c2  |  0.001
 
-1. **dataset** (CSV, XLSX, TSV, JSON, XML): DataFrame of compounds provided by the user.
 
-2. **ID** (str): Column name containing the ID of each compound. 
+### Calculation settings
 
-3. **smiles\_column\_name** (str): Column name containing SMILES notation.
+- **vPCA** (bool): Enable or disable PCA calculations. Default: True
 
-4. **target\_activities** (list): List with the names of columns containing target activity values.
+- **t\_SNE** (bool): Enable or disable t-SNE calculation. Default: True
 
-#### Calculation settings
+- **MACCS** (bool): Enable or disable similarity calculation with MACCS. Default: True
 
-5. **vPCA** (bool): User-defined variable for applying Principal Component Analysis., defined True as default
+- **ECFP** (bool): Enable or disable similarity calculation with Extended Conectivity Fingerprint (ECFP). Default: True
 
-6. **t\_SNE** (bool): User-defined variable for applying t-SNE, defined True as default
+- **radius** (int): User-defined variable for ECFP radius 2 or 3. Default: 3
 
-7. **MACCS** (bool): User-defined variable for applying MACCS keys calculation, defined True as default
+- **druglikeness\_descriptors** (bool): Enables or disable chemical space visualization with drug-likeness descriptors: Default: True
 
-8. **ECFP** (bool): User-defined variable for applying Extended Connectivity Fingerprint calculation., defined True as default
+- **MAP4** (bool): Enables or disable similarity calculation using MAP4. Default: True
 
-9. **druglikeness\_descriptors** (bool): User-defined variable for applying the 6 drug-likeness descriptors, defined True as default
+- **signaturizer_code** (list): List of codes for calculating chemical signatures (signaturizer). Default: All variable codes.
 
-10. **radius** (int): User-defined variable for ECFP radius 2 or 3., defined 3 as default
+ ### Visualzation Settings
 
-11. **fpsize** (int): Variable for define the size of ECFP, the number of bits (1024 or 2048), defines 2048 as default
+- **palette** (str): Color palette for the plots. Default: 'RdBu\_r'.
 
-12. **druglikeness\_descriptors** (bool): User-defined variable for applying the 6 drug-likeness descriptors, defined True as default
+- **size_point** (float): Size of the point in the plots. Default: 12.0
 
-13. **signaturizer\_code** (list): User-defined variable for applying signaturizer with 6 different codes.
+- **size_point_representation** (str)=Variable to define the property to be visualized through the size of the point. Default: 'normal_desviation'
 
-#### Visualization settings
+- **point_shape** (str): Shape of the points in the plots. Default: ‘circle’
 
-14. **palette** (str): User-defined variable for defining a continuous color palette., ‘RdBu\_r’ as default
+### Metric Configuration
 
-15. **size_point** (float): User-defined variable for adjusting point size in the plot, defined 13 as defaul
+- **evaluation_metric** (str): Mathematical expression to combine columns and generate a custom metric. Default: 'mpIC50_value'
 
-16. **point_shape** (str): User-defined variable for adjusting point shape in the plot, ‘circle’ as default
+- **metric_name** (str): Name of the column that will store the calculated metric. Default: 'mpIC50'
 
-17. **size_point_representation** (str)=Variable to define the property to be visualized through the size of the point, 'normal_desviation' as default
 
-#### Color scale configuration
+### t-SNE Configuration
 
-18. **evaluation_metric**(str): Specify the property to be represented on the color scale integrared into each visualizations.
+- **perplexity** (int): Perplexity parameter for t-SNE. Adjust based on dataset size. Default 33
 
-19. **evaluation metric**(str): metric_name (str): User-defined variable for adjusting color scale name in the plot.
+- **n_iterations** (int): Number of iterations for t-SNE. Default: 1000
 
-#### t-SNE configuration
+ ### Parallelization
 
-20. **perplexity** (int): User-defined variable for adjusting the proximity of points in t-SNE, depending on dataset size, defined 33 as default
+ - **n_jobs** (int): Number of CPU cores to use for parallel calculation. Default: -1 (all available cores)
 
-21. **n_iterations** (int): Number of iterations for t-SNE.
+---
 
- #### Parallelize
+## Main Funtions
 
- 22. **n_jobs**(int)Number of cores to parallelize the process
+1. **`pretreatment(smi: str) -> str`**
+   - **Description**: Preprocesses a SMILES string, applying normalization and validation.
+   - **Parameters**:
+     - `smi` (str): SMILES to preprocess.
+   - **Returns**: Preprocessed SMILES or an error message if the SMILES is invalid.
+
+2. **`parallel_pretreatment(data_frame: pd.DataFrame, smiles_column_name: str, n_jobs: int) -> pd.DataFrame`**
+   - **Description**: Parallelizes the preprocessing of SMILES in a DataFrame.
+   - **Parameters**:
+     - `data_frame` (pd.DataFrame): DataFrame containing the SMILES.
+     - `smiles_column_name` (str): Name of the column containing the SMILES.
+     - `n_jobs` (int): Number of cores to use.
+   - **Returns**: DataFrame with a new column `Canonical_Smiles` containing the preprocessed SMILES.
+
+3. **`similarity_calc(smi1: str, smi2: str, method: str = 'tanimoto', fp_type: str = 'MACCS') -> float`**
+   - **Description**: Calculates the similarity between two compounds based on their SMILES.
+   - **Parameters**:
+     - `smi1` (str): SMILES of the first compound.
+     - `smi2` (str): SMILES of the second compound.
+     - `method` (str): Comparison method (default: `'tanimoto'`).
+     - `fp_type` (str): Type of fingerprint to use (`'MACCS'`, `'ECFP'`, or `'MAP4'`).
+   - **Returns**: Similarity coefficient between the compounds.
+
+4. **`calculate_all_similarities_blocks(fp_type: str = 'MACCS', method: str = 'tanimoto') -> pd.DataFrame`**
+   - **Description**: Calculates the similarity between all pairs of compounds in blocks.
+   - **Parameters**:
+     - `fp_type` (str): Type of fingerprint to use.
+     - `method` (str): Comparison method.
+   - **Returns**: DataFrame with the similarity matrix.
+
+5. **`evaluate_metric(data_frame: pd.DataFrame, evaluation_metric: str, metric_name: str) -> pd.DataFrame`**
+   - **Description**: Generates a custom metric based on columns in the DataFrame.
+   - **Parameters**:
+     - `data_frame` (pd.DataFrame): DataFrame containing the required columns.
+     - `evaluation_metric` (str): Mathematical expression to combine columns.
+     - `metric_name` (str): Name of the new column to store the metric.
+   - **Returns**: DataFrame with the new metric column.
+
+6. **`applying_pca(data, n_components=2)`**
+   - **Description**: Applies PCA to the data and returns the principal components.
+   - **Parameters**:
+     - `data`: Input data.
+     - `n_components`: Number of principal components to calculate.
+   - **Returns**: PCA results and explained variance.
+
+7. **`applying_tsne(data, perplexity: int, n_iterations: int)`**
+   - **Description**: Applies t-SNE to the data.
+   - **Parameters**:
+     - `data`: Input data.
+     - `perplexity`: Perplexity parameter for t-SNE.
+     - `n_iterations`: Number of iterations for t-SNE.
+   - **Returns**: t-SNE results.
+
+---
+>[!IMPORTANT]
+>1. Data visualization: Ensure the dataset does not contain null values in key columns (ID and smiles_column_name).
+>2. Parallelization: Use n_jobs=/1 to utilize all available cores and speed calculations.
+>3. Metric Selection: Carefully defined the evaluation metric to obtain meaninful results.
+>4. Visualization: Adjust ˋsize_point_paletteˋ, and ˋpoint_shapeˋ to costumize plots as needed.
+
+---
 
 ## Relevance of some variables
 <p align='justify'>
@@ -72,11 +141,11 @@ The dataset must be annotated with SMILES notation, ID and include at least 1 ac
 ##### **radius**  
 <p align='justify'>
 
-Defined as the radius of the circle centered on each atom within a molecule. Typically this radius corresponds to 2 or 3 bonds, allowing the mapping of the immediate chemical environment of each atom. This variable is essential for capturing local chemical interactions that contribute to molecular activity.
+Defines the radius of the circle centered on each atom within a molecule. Typically this radius corresponds to 2 or 3 bonds, allowing the mapping of the immediate chemical environment of each atom. This variable is essential for capturing local chemical interactions that contribute to molecular activity.
 
 #### **size_point_representation**
 <p align='justify'>
-The default point size is 13. However, it is possible to adjust the size to represent a specific characteristic of the database. By default, the size will represent the standard deviation of activity values, indicating the variability of activity values across the multiple targets in the databases. The user can modify the characteristic to be represented by defining the variable size_point_representation. The possible representations are as follows:
+The default point size is 12. However, it is possible to adjust the size to represent a specific characteristic of the database. By default, the size will represent the standard deviation of activity values, indicating the variability of activity values across the multiple targets in the databases. The user can modify the characteristic to be represented by defining the variable ˋsize_point_representationˋ. Possible representations include:
 
 1. normal_desviation: Default configuration
 2. size_point_HBA: Hydrogen Bond Acceptor
@@ -90,7 +159,7 @@ The default point size is 13. However, it is possible to adjust the size to repr
 A list containing the names of the different bioactive descriptors[^1] used. These descriptors can be expanded or reduced depending on the analysis requirements. The included descriptors are:
 
 Level     |   1  |   2  |  3  |   4  |   5
-  ---     |  ---  |  ---  |  --- |  ---  |  ---
+  :---:     |  :---:  |  :---:  |  :---: |  :---:  |  :---:
 Chemistry (A) |  2D Fingerprints  |  3D Fingerprints  |  Scaffolds |  Structural keys  |  Physicochemistry
 Targets (B)   |  Mechanisms of action  |  Metabolic genes  | Crystals |  Binding  |  HTS bioassays
 Networks (C)  | Small molecule roles | Small molecule pathways | Signaling pathways | Biological proceses | Interactome

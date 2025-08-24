@@ -5,25 +5,24 @@
 
 
 <p align='justify'>
-Multiple ActivitY Analyzer (MAYA) is designed to automatically construct a chemical multiverse, generating multiple visualizations of chemical spaces described by structural descriptors such as MACCS keys (166 bits), ECFP 4 and 6, molecular descriptors with pharmaceutical relevance as well as implementing biological descriptors. These representations are integrated with various visualization techniques for automated analysis, focusing on the analysis of structure - multiple activiy/property relationships (SMARTs).
-  
+Multiple ActivitY Analyzer (MAYA) is an open-source Python tool designed to automate the generation of chemical multiverses for comprehensive analysis of structure-activity/property relationships/associations. MAYA integrates multiple molecular representations, including structural descriptors (e.g., MACCS keys, ECFP4, ECFP6, and MAP4), physicochemical molecualr descriptrs, and biological descriptors, to construct diverse chemical spaces. These spaces are visualized through interactive 2D plots, enabling deeper insights into molecular characteristics and their relationships with activities or properties
+
 <p align='center'>
 <img src="https://github.com/IsrC11/MAYA/blob/324aefd424da8d25b9dcc5ef2caba67743437a09/Wflow.png" alt="Process" width="1000">
 <p align='justify'>
 </div>
 <p align='justify'>
-MAYA has been developing as a user-friendly, open-source tool that automates the construction of chemical spaces by integrating diverse molecular representations to provide a more comprehensive description of the structural, chemical, and functional characteristics of a given set of molecules described by their SMILES notation and an associated activity/property, and the tool supports various file formats (CSV, TSV, XLSX, JSON and XML), requiring only the specification of a few parameters related to the database in use and the desired representations. Additionally, MAYA includes options for customizing the visualizations.
-<p align='justify'>
-The generated visualizations are interactive, enhancing the understanding of the displayed data. They offer a 2D view of the molecular structure, along with the obtained variability values from PCA and their SMILES notation. Customization features allow users to adjust the size, shape, and transparency of data points, as well as the ability to modify the color palette.
-
+MAYA is user-friendly and supports various input file formats (CSV, TSV, XLSX, JASON, and XML), requering only a dataset with SMILES notation, molecualr identifiers, and associated activity/property values. Users can customize the analysis by selecting specific descriptors and demensionality reduction techniques (e.g., PCA) through simple parameters setting. The tool automates the following key processes: 
 <p align='justify'>
 The script consist in a funtion that automatically implement:
   
-1. Data curation
-2. Descriptors calculation
-3. Tanimoto simmilarity calculation
-4. Dimensionality reduction
-5. 2D interactive visualization
+1. Data curation: Ensures high-quality data by validating and preprocessing molecualr datasets.
+2. Descriptors calculation: Computes structural, physicochemical, and biological descriptors for molecular characterization.
+3. Tanimoto simmilarity calculation: Quantifies molecular similarity to support chemical space analysis
+4. Dimensionality reduction: Applies techniques like PCA and t-SNE to reduce complexity while preserving meaningful patters.
+5. 2D interactive visualization: Generates customizable, interactive plots displaying molecualr structures, PCA-derived variability, SMILES notaton, and user-defined visual attributes (e.g., point size, shape, color palette, and transparency)
+
+MAYA's visualizations are designed to enhance intepretability, offering researchers a clear and interactive way to explore chemical spaces. The tools is particularly suited for chemoinformatics applications, such as drug discovery, where understanding complex structured-activity relationships is critical.
 
 [Here](https://github.com/IsrC11/MAYA/blob/cc7d8d7f59947269491ba37b3f772eeca4d81741/User_Guide.md) you can find more detailed information about how MAYA works 
 
@@ -31,11 +30,11 @@ The script consist in a funtion that automatically implement:
 
 >[!IMPORTANT]
 >It is essential to ensure our dataset contains the following information:
->1. Smiles notation
->2. Identifier
->3. Activity or property values
+>1. Smiles notation: Molecular representation
+>2. Identifier: Unique molecule identifiers
+>3. Activity or property values: Quantitative or categorical data for analysis
 >
->Depending on the user's interests, it is possible to select specific descriptors and dimensionality reduction thecniques to use. By setting variables as True or False, users can enable or disable their calculation.
+>Users can customize the analysis by enabling or disabling specific descriptors and dimensionality reduction techniquese via Boolean parameters (e.g., True or False) Detailed instructions and examples are available in the documentation.
 
 #### Example of usage
 ```markdown

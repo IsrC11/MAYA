@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "maya-chem"
+version = "0.1.0"
+description = "Automated chemical multiverse analysis for cheminformatics"
+authors = [{name = "IsrC11", email = "your@email.com"}]
+license = {file = "LICENSE"}
+requires-python = ">=3.8"
+dependencies = [
+    "rdkit",
+    "pandas>=1.0",
+    "numpy>=1.20",
+    "scikit-learn>=1.0",
+    "plotly>=5.0",
+    "joblib>=1.0",
+    "molplotly>=0.2",
+    "map4>=1.0",
+    "signaturizer3d>=1.0; python_version>='3.8'"
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+]
+
+[project.scripts]
+maya = "maya.cli:maya_cli"
+
+[project.urls]
+Homepage = "https://github.com/IsrC11/MAYA"
+Repository = "https://github.com/IsrC11/MAYA.git"

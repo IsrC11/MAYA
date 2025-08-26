@@ -19,7 +19,7 @@ try:
 except ImportError:
     molplotly = None
 
-def create_interactive_plot(df: pd.DataFrame, config: MayaConfig, method: str, desc_type: str) -> px.Figure:
+def create_interactive_plot(df: pd.DataFrame, config: MayaConfig, method: str, desc_type: str) -> plt:
     """Create an interactive scatter plot."""
     x, y = (f'{method}_1', f'{method}_2')
     title = f"{method} - {desc_type.replace('druglikeness', 'Drug-likeness')}"

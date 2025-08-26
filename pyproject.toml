@@ -1,15 +1,24 @@
-[build-system]
-requires = ["setuptools>=61.0", "wheel"]
-build-backend = "setuptools.build_meta"
+from setuptools import setup, find_packages
+
 
 [project]
 name = "MAYA-chem"
 version = "0.1.0"
 description = "Automated chemical multiverse analysis for cheminformatics"
-authors = [{name = "IsrC11", email = "isrcd11@gmail.com"}]
-license = {file = "LICENSE"}
-requires-python = ">=3.8"
-dependencies = [
+
+[project.urls]
+Homepage = "https://github.com/IsrC11/MAYA"
+Repository = "https://github.com/IsrC11/MAYA.git"
+
+
+setup(
+    name='MAYA-CHEM', 
+    version=version, 
+    description=description, 
+    url=Homepage, 
+    packages=find_packages(),
+    include_package_data=True,
+    install_required=[
     "dash-bootstrap-components==1.6.0",
     "jupyter-dash==0.4.2",
     "kaleido==0.2.1",
@@ -26,16 +35,9 @@ dependencies = [
     "joblib==1.4.2",
     "Pillow==11.0.0",
     "signaturizer3D==0.1.8",
-    "scikit-fingerprints==1.13.1"]
-    
-classifiers = [
+    "scikit-fingerprints==1.13.1"],
+    classifiers=[
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
-]
-
-[project.scripts]
-MAYA = "MAYA.cli:MAYA_cli"
-
-[project.urls]
-Homepage = "https://github.com/IsrC11/MAYA"
-Repository = "https://github.com/IsrC11/MAYA.git"
+    "License :: OSI Approved :: MIT License",],
+    zip_safe=False,
+    )

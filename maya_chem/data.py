@@ -9,8 +9,12 @@ Original file is located at
 
 # maya/data.py
 import pandas as pd
-from rdkit import Chem
-from rdkit.Chem.rdmolops import Standardizer, LargestFragmentChooser, Uncharger, Reionizer, TautomerCanonicalizer
+from rdkit import Chem, RDConfig
+from rdkit.Chem import AllChem, Draw, Descriptors, Descriptors3D, rdMolDescriptors
+from molvs.standardize import Standardizer
+from molvs.charge import Uncharger, Reionizer
+from molvs.fragment import LargestFragmentChooser
+from molvs.tautomer import TautomerCanonicalizer
 from joblib import Parallel, delayed
 from typing import Tuple, List
 import os

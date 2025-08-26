@@ -1,43 +1,43 @@
-from setuptools import setup, find_packages
-
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
 
 [project]
-name = "MAYA-chem"
+name = "maya-chem"
 version = "0.1.0"
 description = "Automated chemical multiverse analysis for cheminformatics"
+authors = [{name = "IsrC11", email = "your@email.com"}]
+license = {file = "LICENSE"}
+requires-python = ">=3.8"
+dependencies = [
+    "rdkit>=2024.3.1",
+    "pandas>=2.0.0",
+    "numpy>=1.26.0",
+    "scikit-learn>=1.5.0",
+    "plotly>=5.0.0",
+    "joblib>=1.4.0",
+    "molplotly>=1.1.7",
+    "map4>=1.0",
+    "dash-bootstrap-components>=1.6.0",
+    "jupyter-dash>=0.4.2",
+    "kaleido>=0.2.1",
+    "matplotlib>=3.8.0",
+    "molvs>=0.1.1",
+    "py3Dmol>=2.4.2",
+    "seaborn>=0.13.2",
+    "scikit-fingerprints>=1.13.1",
+    # Optional: signaturizer3D may not be on PyPI; handle manually if needed
+    "signaturizer3D>=0.1.8; python_version>='3.8'"
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent"
+]
+
+[project.scripts]
+maya = "maya.cli:maya_cli"
 
 [project.urls]
 Homepage = "https://github.com/IsrC11/MAYA"
 Repository = "https://github.com/IsrC11/MAYA.git"
-
-
-setup(
-    name='MAYA-CHEM', 
-    version=version, 
-    description=description, 
-    url=Homepage, 
-    packages=find_packages(),
-    include_package_data=True,
-    install_required=[
-    "dash-bootstrap-components==1.6.0",
-    "jupyter-dash==0.4.2",
-    "kaleido==0.2.1",
-    "kora==0.9.20",
-    "matplotlib==3.8.0",
-    "molplotly==1.1.7",
-    "molvs==0.1.1",
-    "numpy==1.26.4",
-    "pandas==2.2.2",
-    "py3Dmol==2.4.2",
-    "rdkit==2024.3.6",
-    "scikit-learn==1.5.2",
-    "seaborn==0.13.2",
-    "joblib==1.4.2",
-    "Pillow==11.0.0",
-    "signaturizer3D==0.1.8",
-    "scikit-fingerprints==1.13.1"],
-    classifiers=[
-    "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",],
-    zip_safe=False,
-    )

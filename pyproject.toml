@@ -27,7 +27,7 @@ dependencies = [
     "seaborn==0.13.2",
     "scikit-fingerprints==1.13.1",
     # Optional: signaturizer3D may not be on PyPI; handle manually if needed
-    "signaturizer3D==0.1.8,
+    "signaturizer3D==0.1.8",
 ]
 classifiers = [
     "Programming Language :: Python :: 3",

@@ -9,6 +9,7 @@ Original file is located at
 
 # maya/visualization.py
 import plotly.express as px
+import matplotlib.pyplot as plt 
 import plotly.io as pio
 import pandas as pd
 from .config import MayaConfig

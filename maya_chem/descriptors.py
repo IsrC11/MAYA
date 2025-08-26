@@ -10,7 +10,7 @@ Original file is located at
 # maya/descriptors.py
 from rdkit import Chem, DataStructs
 from rdkit.Chem import AllChem, MACCSkeys, Descriptors
-from map4 import MAP4Fingerprint
+from skfp.fingerprints import MAPFingerprint
 import pandas as pd
 import numpy as np
 from typing import List, Tuple, Optional

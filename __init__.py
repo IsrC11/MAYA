@@ -12,5 +12,5 @@ Original file is located at
 from .analyzer import MayaAnalyzer, chemical_multiverse
 from .config import MayaConfig
 
-_version__'0.1.0'
+__version__'0.1.0'
 __all__ = ['MayaAnalyzer', 'MayaConfig', 'chemical_multiverse']

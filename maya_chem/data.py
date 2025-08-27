@@ -18,6 +18,7 @@ from molvs.tautomer import TautomerCanonicalizer
 from joblib import Parallel, delayed
 from typing import Tuple, List
 import os
+import re
 from .config import MayaConfig
 
 def load_dataset(file_path: str, config: MayaConfig) -> pd.DataFrame:

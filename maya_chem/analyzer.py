@@ -19,14 +19,12 @@ class MayaAnalyzer:
             activities=self.config.data['activities'],
             eval_metric=self.config.data.get('eval_metric', 'mpIC50_value'),
             metric_name=self.config.data.get('metric_name', 'custom_metric'),
-            use_custom_metric=True,  # Enable custom metric
-            create_new_column=True   # Create new column for custom metric
+            use_custom_metric=True,
+            create_new_column=True
         )
 
         # Rest of the pipeline (e.g., descriptors, similarity, visualization)
-        # Example: Use metric_col for further processing
+        # Use metric_col for further processing
         # ...
 
-        return df  # Or return processed results
-
-# Other methods remain unchanged
+        return df

@@ -1,6 +1,6 @@
 import pandas as pd
 import os
-from typing import List, ,Tuple
+from typing import List,Tuple
 from .config import MayaConfig
 from .utils import compute_activity_metrics
 

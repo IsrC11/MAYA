@@ -26,31 +26,39 @@ def compute_activity_metrics(
     """
     final_metric_col = 'mpIC50_value'  # Default metric column
 
+    # Compute default metrics if activities are provided
     if activities:
         df['mpIC50_value'] = -np.log10(df[activities]).mean(axis=1)
         df['std'] = df[activities].std(axis=1)
         df['norma'] = (df['std'] - df['std'].min()) / (df['std'].max() - df['std'].min() + 1e-6)
         df['normal_deviation'] = df['norma'] * 2 + 9
         df['normal_deviation'] = df['normal_deviation'].fillna(10)
-        final_metric_col = 'mpIC50_value'  # Update if calculated
+        final_metric_col = 'mpIC50_value'
 
+    # Handle custom metric
     if use_custom_metric and eval_metric != 'mpIC50_value':
-        cols = re.findall(r'\b\w+\b', eval_metric)
-        missing = [c for c in cols if c not in df.columns]
-        if missing:
-            raise ValueError(f"Missing columns: {missing}")
-
-        # Replace 'activities' in the expression
-        expr = eval_metric.replace('activities', f"df[{activities}]")
+        # Validate eval_metric is a string
+        if not isinstance(eval_metric, str):
+            raise TypeError(f"eval_metric must be a string, got {type(eval_metric)}")
 
         # Check if eval_metric is a single column name
-        is_single_column = len(cols) == 1 and cols[0] in df.columns and expr == cols[0]
-
-        if is_single_column and not create_new_column:
-            # Use existing column directly
-            final_metric_col = eval_metric
+        if eval_metric in df.columns:
+            if not create_new_column:
+                final_metric_col = eval_metric  # Use existing column
+            else:
+                df[metric_name] = df[eval_metric]  # Copy column to new name
+                final_metric_col = metric_name
         else:
-            # Evaluate and create new column
+            # Extract column names from eval_metric expression
+            cols = re.findall(r'\b\w+\b', eval_metric)
+            missing = [c for c in cols if c not in df.columns]
+            if missing:
+                raise ValueError(f"Missing columns: {missing}")
+
+            # Replace 'activities' in the expression
+            expr = eval_metric.replace('activities', f"df[{activities}]")
+
+            # Evaluate the expression
             df[metric_name] = pd.eval(expr, engine='python')
             final_metric_col = metric_name
 
@@ -59,5 +67,3 @@ def compute_activity_metrics(
         final_metric_col = 'mpIC50_value'
 
     return df, final_metric_col
-
-# Other utility functions (if any) remain unchanged

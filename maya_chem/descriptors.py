@@ -41,7 +41,7 @@ def compute_fingerprints_and_similarity(mols: List, desc_type: str, radius: Opti
     elif desc_type == 'ECFP':
         fps = [AllChem.GetMorganFingerprintAsBitVect(m, radius or 3, nBits=2048) for m in mols]
     elif desc_type == 'MAP4':
-        map4 = MAP4Fingerprint()
+        map4 = MAPFingerprint()
         fps = [map4.transform([Chem.MolToSmiles(m)])[0] for m in mols]
         fps = [DataStructs.ExplicitBitVect([int(b) for b in fp]) for fp in fps]
     else:

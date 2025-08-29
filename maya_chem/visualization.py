@@ -9,6 +9,7 @@ Original file is located at
 
 # maya/visualization.py
 import plotly.express as px
+import os
 import matplotlib.pyplot as plt 
 import plotly.io as pio
 import pandas as pd
@@ -21,7 +22,12 @@ except ImportError:
 
 def create_interactive_plot(df: pd.DataFrame, config: MayaConfig, method: str, desc_type: str) -> plt:
     """Create an interactive scatter plot."""
+    
     x, y = (f'{method}_1', f'{method}_2')
+    
+    if x not in df.columns or not in df.columns:
+        raise ValueError(f"Columns {x}, {y} not found in DataFrame")
+    
     title = f"{method} - {desc_type.replace('druglikeness', 'Drug-likeness')}"
     if desc_type == 'signaturizer' and config.signaturizer_codes:
         title = f"{method} - Signaturizer ({config.signaturizer_codes[0]})"
@@ -37,9 +43,12 @@ def create_interactive_plot(df: pd.DataFrame, config: MayaConfig, method: str, d
                                 xanchor='center', yanchor='bottom', thickness=15, len=0.6, y=-0.29,
                                 title_font_size=30, tickfont_size=18)
     )
+
+    os.makedirs(config.viz['output_dir'], exit_ok=True)
     pio.write_image(fig, f"{config.viz['output_dir']}/fig_{method}_{desc_type}.png")
     if molplotly:
         try:
+            smiles_col=config.data['smiles_col']
             caption_cols = ['Canonical_Smiles', 'PC1_contribution', 'PC2_contribution'] if method == 'PCA' else ['Canonical_Smiles']
             app = molplotly.add_molecules(fig, df, smiles_col='Canonical_Smiles',
                                          title_col=config.data['id_col'],

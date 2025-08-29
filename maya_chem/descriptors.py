@@ -13,6 +13,7 @@ from rdkit.Chem import AllChem, MACCSkeys, Descriptors
 from skfp.fingerprints import MAPFingerprint
 import pandas as pd
 import numpy as np
+import logging
 from typing import List, Tuple, Optional
 from joblib import Parallel, delayed
 try:
@@ -34,7 +35,7 @@ def compute_druglikeness_descriptors(mols: List, df: pd.DataFrame) -> pd.DataFra
         desc[f'size_point_{col}'] = 7 + np.log1p((desc[col] - desc[col].min()) / (desc[col].max() - desc[col].min() + 1e-6)) * 12
     return desc
 
-def compute_fingerprints_and_similarity(mols: List, desc_type: str, radius: Optional[int], n_jobs: int) -> Tuple[pd.DataFrame, pd.DataFrame]:
+def compute_fingerprints_and_similarity(mols: List, desc_type: str, radius: Optional[int], n_jobs: int, df:DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
     """Compute fingerprints and similarity matrix."""
     if desc_type == 'MACCS':
         fps = [MACCSkeys.GenMACCSKeys(m) for m in mols]
@@ -64,7 +65,7 @@ def compute_signaturizer(smiles: List[str], codes: List[str]) -> pd.DataFrame:
         'A1': CCSpace.A1, 'A2': CCSpace.A2, 'A3': CCSpace.A3, 'A4': CCSpace.A4, 'A5': CCSpace.A5,
         'B1': CCSpace.B1, 'B2': CCSpace.B2, 'B3': CCSpace.B3, 'B4': CCSpace.B4, 'B5': CCSpace.B5,
         'C1': CCSpace.C1, 'C2': CCSpace.C2, 'C3': CCSpace.C3, 'C4': CCSpace.C4, 'C5': CCSpace.C5,
-        'D1': CCSpace.B1, 'D2': CCSpace.B2, 'D3': CCSpace.B3, 'D4': CCSpace.B4, 'D5': CCSpace.B5,
+        'D1': CCSpace.D1, 'D2': CCSpace.D2, 'D3': CCSpace.D3, 'D4': CCSpace.D4, 'D5': CCSpace.D5,
         'E1': CCSpace.E1, 'E2': CCSpace.E2, 'E3': CCSpace.E3, 'E4': CCSpace.E4, 'E5': CCSpace.E5
     }
     valid_codes = [c for c in codes if c in mapping]

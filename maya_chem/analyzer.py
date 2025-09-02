@@ -44,8 +44,4 @@ class MayaAnalyzer:
         visualization.plot_scatter(self.data, x="PC1", y="PC2", hue="MolWt")
 
     def run(self):
-        self.load_data()
-        self.compute_descriptors()
-        self.compute_similarity()
-        self.reduce_dimensions()
-        self.visualize()
+        df = load_data(self.config.data_path, id_col=self.config.data['id_col'], smiles_col=self.config.data['smiles_col'])

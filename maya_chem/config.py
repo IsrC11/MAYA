@@ -14,9 +14,8 @@ from dataclasses import dataclass
 @dataclass
 class MayaConfig:
     def __init__(self, data_path: str = None):
-        self.data_path
-    """Configuration for MAYA analysis."""
-
+        self.data_path = data_path
+        
         self.data={
             'id_col': None,
             'smiles_col': None,

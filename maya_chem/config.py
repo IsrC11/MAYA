@@ -13,10 +13,23 @@ from dataclasses import dataclass
 
 @dataclass
 class MayaConfig:
+    def __init__(self, data_path: str = None):
+        self.data_path
     """Configuration for MAYA analysis."""
-    data_path: str
-    output_dir: str = "results"
-    n_jobs: int = -1
 
-    def __post_init__(self):
-        os.makedirs(self.output_dir, exist_ok=True)
+        self.data={
+            'id_col': None,
+            'smiles_col': None,
+            'activities': [],
+            'eval_metric': None,
+            'metric_value': None
+        }
+
+        self.analysis = {
+            'descriptors': [],
+            'reduction_method''pca'
+        }
+
+        self.viz = {
+            'output_dir':'./results'
+        }

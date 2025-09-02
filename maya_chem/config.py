@@ -26,7 +26,7 @@ class MayaConfig:
 
         self.analysis = {
             'descriptors': [],
-            'reduction_method''pca'
+            'reduction_method':'pca'
         }
 
         self.viz = {

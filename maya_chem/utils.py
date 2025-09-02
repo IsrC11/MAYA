@@ -26,7 +26,7 @@ def load_data(file_path: str, id_col: str = "ID", smiles_col: str = "SMILES") ->
     elif ext in [".tsv", ".txt"]:
         df = pd.read_csv(file_path, sep="\t")
 
-    elif ext in ['.xls', 'xlsx']
+    elif ext in ['.xls', 'xlsx']:
         df = pd.read_excel(file_path)
     else:
         raise ValueError(f"Unsupported file extension: {ext}")

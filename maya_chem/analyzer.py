@@ -36,7 +36,7 @@ class MayaAnalyzer:
             coords = reduction.apply_umap(sim_matrix, n_components=n_componets)
         else:
             raise ValueError(f'Unknown dimentionallity reduction method: {method}')
-        self.data =　pd.concat([self.data, coords], axis=1)
+        self.data=pd.concat([self.data, coords], axis=1)
         return coords
         
     def visualize(self, show: bool = True, save_prefix: str | None = None):

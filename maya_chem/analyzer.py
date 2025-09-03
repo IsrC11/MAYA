@@ -10,6 +10,7 @@ Original file is located at
 # maya/analyzer.py
 import pandas as pd
 from .config import MayaConfig
+from .utils import load_data, compute_activity_metrics
 from . import utils, descriptors, similarity, reduction, visualization
 
 class MayaAnalyzer:

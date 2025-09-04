@@ -50,5 +50,5 @@ class MayaAnalyzer:
         self.load_data()
         self.compute_descriptors()
         self.compute_similarity()
-        self.reduce_dimentions(method=self.config.data.get('reduction', 'pca'))
+        self.reduce_dimensions(method=self.config.data.get('reduction', 'pca'))
         return self.visualize(show=True)

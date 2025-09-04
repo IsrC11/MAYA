@@ -11,10 +11,13 @@ Original file is located at
 from rdkit import Chem
 from rdkit.Chem import Descriptors, AllChem
 
-def compute_morgan_fingerprint(smiles: str):
+def compute_morgan_fingerprint(smiles: str, radius: int = 2, nBits = int = 2048):
     """Compute Morgan fingerprint."""
     mol = Chem.MolFromSmiles(smiles)
-    return AllChem.GetMorganGenerator(mol, radius=2) if mol else None
+    if not mol
+        return None
+    gab = AllChem.GetMorganGenerator(mol, radius=radius, fpSize=nBits)
+    return gab.GetFingerprint(mol)
 
 def compute_physicochemical_properties(smiles: str):
     """Compute basic molecular descriptors."""

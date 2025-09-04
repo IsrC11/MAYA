@@ -21,7 +21,7 @@ def coompute_maccs_fingerprin(smiles: str):
 
 def compute_map4_fingerprint(smiles: str):
     """compute MAP4 fingerprints"""
-    map_4 =　MAPFingerprint()
+    map_4 = MAPFingerprint()
     fg_map4 = map_4.transform(smiles)
     fp_map4_bitvect = [numpy_to_bitvect(fg_map4)]
     return fp_map4_bitvect

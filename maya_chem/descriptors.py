@@ -11,7 +11,7 @@ Original file is located at
 from rdkit import Chem
 from rdkit.Chem import Descriptors, AllChem
 
-def compute_morgan_fingerprint(smiles: str, radius: int = 2, nBits = int = 2048):
+def compute_morgan_fingerprint(smiles: str, radius: int = 2, nBits: int = 2048):
     """Compute Morgan fingerprint."""
     mol = Chem.MolFromSmiles(smiles)
     if not mol

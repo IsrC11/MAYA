@@ -44,7 +44,7 @@ class MayaAnalyzer:
         return coords
         
     def visualize(self, show: bool = True, save_prefix: str | None = None):
-        fig1 =visualization.plot_similarity_heatmap(self.sim_matrix, label=self.data[self.config.data['id_col']], output_path=f'{save_prefix}_heatmap.png' if save_prefix else None, show=how)
+        fig1 =visualization.plot_similarity_heatmap(self.sim_matrix, label=self.data[self.config.data['id_col']], output_path=f'{save_prefix}_heatmap.png' if save_prefix else None, show=show)
 
         fig2 = visualization.plot_scatter(self.data, x='Dimention1', y='Dimention2', hue='MolWt' if 'MolWt' in self.data.columns else None, output_path=f'{save_prefix}_scatter.png' if save_prefix else None, show=show)
         return self.visualize(show=True)

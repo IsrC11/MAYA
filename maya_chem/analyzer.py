@@ -1,5 +1,6 @@
 # maya/analyzer.py
 import pandas as pd
+import numpy as np
 from .config import MayaConfig
 from .utils import load_data
 from . import utils, descriptors, similarity, reduction, visualization

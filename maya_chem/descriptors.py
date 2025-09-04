@@ -14,7 +14,7 @@ from rdkit.Chem import Descriptors, AllChem
 def compute_morgan_fingerprint(smiles: str, radius: int = 2, nBits: int = 2048):
     """Compute Morgan fingerprint."""
     mol = Chem.MolFromSmiles(smiles)
-    if not mol
+    if not mol:
         return None
     gab = AllChem.GetMorganGenerator(mol, radius=radius, fpSize=nBits)
     return gab.GetFingerprint(mol)

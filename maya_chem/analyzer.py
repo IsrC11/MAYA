@@ -24,7 +24,7 @@ class MayaAnalyzer:
         return self.fps, self.data
 
     def compute_similarity(self, n_jobs: int = -1):
-        self.sim_matrix = similarity.compute_similarity_matrix(self.fps, self.config.n_jobs)
+        self.sim_matrix = similarity.compute_similarity_matrix(self.fps, n_jobs)
         return self.sim_matrix
 
     def reduce_dimensions(self, method: str = 'pca', n_components: int = 2):

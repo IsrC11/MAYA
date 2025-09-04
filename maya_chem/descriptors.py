@@ -16,7 +16,7 @@ def compute_morgan_fingerprint(smiles: str, radius: int = 2, nBits: int = 2048):
     mol = Chem.MolFromSmiles(smiles)
     if not mol:
         return None
-    gab = AllChem.GetMorganGenerator(mol, radius=radius, fpSize=nBits)
+    gab = AllChem.GetMorganGenerator(radius=radius, fpSize=nBits)
     return gab.GetFingerprint(mol)
 
 def compute_physicochemical_properties(smiles: str):

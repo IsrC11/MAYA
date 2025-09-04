@@ -28,7 +28,7 @@ class MayaAnalyzer:
         return self.sim_matrix
 
     def reduce_dimensions(self, method: str = 'pca', n_components: int = 2):
-        x = np.array([np.frombuffer(fp.ToBitString().encode('utf-8'), dtypes='S1', for fp in self.fps])
+        x = np.array([np.frombuffer(fp.ToBitString().encode('utf-8'), dtypes='S1'), for fp in self.fps])
         x = (x.view(np.uint8) - ord('0')).reshape(len(self.fps), -1)
         
         if method.lower() == 'pca':

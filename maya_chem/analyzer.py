@@ -29,11 +29,11 @@ class MayaAnalyzer:
 
     def reduce_dimensions(self, method: str = 'pca', n_components: int = 2):
         if method.lower() == 'pca':
-            coords = reduction.apply_pca(sim_matrix, n_components=n_components)
+            coords = reduction.apply_pca(fps, n_components=n_components)
         elif method.lower() == 'tsne':
-            coords = reduction. apply_tsne(sim_matrix, n_components=n_components)    
+            coords = reduction. apply_tsne(fps, n_components=n_components)    
         elif method.lower() == 'umap':
-            coords = reduction.apply_umap(sim_matrix, n_components=n_componets)
+            coords = reduction.apply_umap(fps, n_components=n_componets)
         else:
             raise ValueError(f'Unknown dimentionallity reduction method: {method}')
         self.data=pd.concat([self.data, coords], axis=1)

@@ -28,18 +28,22 @@ def compute_map4_fingerprint(smiles: str):
     arr = map_4.transform(mol)
     return numpy_to_bitvect(arr)
 
-def compute_physicochemical_properties(smiles: str):
+def compute_physicochemical_properties(smiles: str, selected_props=None):
     """Compute basic molecular descriptors."""
     mol = Chem.MolFromSmiles(smiles)
     if not mol:
         return None
-    return {
+    all_props = {
         "MolWt": Descriptors.MolWt(mol),
         "LogP": Descriptors.MolLogP(mol),
         "HBA": Descriptors.NumHAcceptors(mol),
         "HBD": Descriptors.NumHDonors(mol),
         "TPSA": Descriptors.TPSA(mol),
     }
+
+    if selected_props:
+        return {k: v for k, v in all_props.items() if k in selected_props}
+    return all_props
 
 def compute_fingerprint(smiles: str, method: str = 'morgan'):
     method = method.lower()

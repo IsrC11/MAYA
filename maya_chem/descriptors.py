@@ -11,7 +11,7 @@ def compute_morgan_fingerprint(smiles: str, radius: int = 2, nBits: int = 2048):
     gen = AllChem.GetMorganGenerator(radius=radius, fpSize=nBits)
     return gen.GetFingerprint(mol)
 
-def coompute_maccs_fingerprin(smiles: str):
+def compute_maccs_fingerprin(smiles: str):
     """Compute MACCS kesys 166 bits"""
     mol = Chem.MolFromSmiles(smiles)
     if not mol:
@@ -38,7 +38,7 @@ def compute_physicochemical_properties(smiles: str):
         "TPSA": Descriptors.TPSA(mol),
     }
 
-def compute_fingerprints(smiles: str, method: str = 'morgan'):
+def compute_fingerprint(smiles: str, method: str = 'morgan'):
     method == metthod.lower()
     if method == 'morgan' or method == 'ecfp':
         return compute_morgan_fingerprint(smiles)

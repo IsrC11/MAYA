@@ -39,7 +39,7 @@ def compute_physicochemical_properties(smiles: str):
     }
 
 def compute_fingerprint(smiles: str, method: str = 'morgan'):
-    method == metthod.lower()
+    method == method.lower()
     if method == 'morgan' or method == 'ecfp':
         return compute_morgan_fingerprint(smiles)
     elif method =='maccs':

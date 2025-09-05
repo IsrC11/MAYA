@@ -28,7 +28,10 @@ class MayaAnalyzer:
         self.sim_matrix = similarity.compute_similarity_matrix(self.fps, n_jobs)
         return self.sim_matrix
 
-    def reduce_dimensions(self, method: str = 'pca', n_components: int = 2):
+    def reduce_dimensions(self, method: str = None, n_components: int = 2):
+        
+        method = method or self.config.analysis.get('reduction_method', 'pca')
+        
         x = np.array([np.frombuffer(fp.ToBitString().encode('utf-8'), dtype='S1') for fp in self.fps])
         x = (x.view(np.uint8) - ord('0')).reshape(len(self.fps), -1)
         

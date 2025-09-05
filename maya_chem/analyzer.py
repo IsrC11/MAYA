@@ -20,9 +20,10 @@ class MayaAnalyzer:
 
     def compute_descriptors(self):
         smiles_col = self.config.data['smiles_col']
-        self.data["Properties"] = self.data[smiles_col].apply(descriptors.compute_physicochemical_properties)
-        desc_type = self.config.analysis.get('descriptor', 'morgan')
-        self.fps = [descriptors.compute_fingerprint(smi, method=desc_type) for smi in self.data[smiles_col]]
+        selected_props = self.config.analysis.get('properties', None)
+        self.data['Properties'] = self.data[smiles_col].apply(lambda smi: descriptors.compute_physicochemical_properties(smi, selected_props=selected_props)
+        fp_type = self.config.analysis.get('fingerprint', 'morgan')
+        self.fps = [descriptors.compute_fingerprint(smi, method=fp_type) for smi in self.data[smiles_col]]
 
     def compute_similarity(self, n_jobs: int = -1):
         self.sim_matrix = similarity.compute_similarity_matrix(self.fps, n_jobs)

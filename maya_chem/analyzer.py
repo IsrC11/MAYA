@@ -21,7 +21,7 @@ class MayaAnalyzer:
     def compute_descriptors(self):
         smiles_col = self.config.data['smiles_col']
         selected_props = self.config.analysis.get('properties', None)
-        self.data['Properties'] = self.data[smiles_col].apply(lambda smi: descriptors.compute_physicochemical_properties(smi, selected_props=selected_props)
+        self.data['Properties'] = self.data[smiles_col].apply(lambda smi: descriptors.compute_physicochemical_properties(smi, selected_props=selected_props))
         fp_type = self.config.analysis.get('fingerprint', 'morgan')
         self.fps = [descriptors.compute_fingerprint(smi, method=fp_type) for smi in self.data[smiles_col]]
 

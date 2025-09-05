@@ -40,7 +40,7 @@ class MayaAnalyzer:
         elif method.lower() == 'tsne':
             coords = reduction. apply_tsne(x, n_components=n_components)    
         elif method.lower() == 'umap':
-            coords = reduction.apply_umap(x, n_components=n_componets)
+            coords = reduction.apply_umap(x, n_components=n_components)
         else:
             raise ValueError(f'Unknown dimentionallity reduction method: {method}')
 

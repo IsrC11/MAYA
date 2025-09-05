@@ -1,6 +1,6 @@
 # maya/descriptors.py
 from rdkit import Chem
-from rdkit.Chem import Descriptors, AllChem
+from rdkit.Chem import Descriptors, AllChem, MACCSkeys
 from skfp.fingerprints import MAPFingerprint
 
 def compute_morgan_fingerprint(smiles: str, radius: int = 2, nBits: int = 2048):
@@ -8,16 +8,15 @@ def compute_morgan_fingerprint(smiles: str, radius: int = 2, nBits: int = 2048):
     mol = Chem.MolFromSmiles(smiles)
     if not mol:
         return None
-    gab = AllChem.GetMorganGenerator(radius=radius, fpSize=nBits)
-    return gab.GetFingerprint(mol)
+    gen = AllChem.GetMorganGenerator(radius=radius, fpSize=nBits)
+    return gen.GetFingerprint(mol)
 
 def coompute_maccs_fingerprin(smiles: str):
     """Compute MACCS kesys 166 bits"""
     mol = Chem.MolFromSmiles(smiles)
     if not mol:
         return None
-    fp_maccs = MACCSkeys.GenMACCSKeys(mol)
-    return fp_maccs
+    return MACCSkeys.GenMACCSKeys(mol)
 
 def compute_map4_fingerprint(smiles: str):
     """compute MAP4 fingerprints"""
@@ -38,3 +37,15 @@ def compute_physicochemical_properties(smiles: str):
         "HBD": Descriptors.NumHDonors(mol),
         "TPSA": Descriptors.TPSA(mol),
     }
+
+def compute_fingerprints(smiles: str, method: str = 'morgan'):
+    method == metthod.lower()
+    if method = 'morgan' or method = 'ecfp':
+        return compute_morgan_fingerprint(smiles)
+    elif method =='maccs':
+        return compute_maccs_fingerprint(smiles)
+    elif method == 'map4':
+        return compute_map4_fingerprint(smiles)
+    else:
+        raise ValueError(f'Unknown fingerprint method:{method}')
+

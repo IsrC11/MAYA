@@ -21,8 +21,8 @@ class MayaAnalyzer:
     def compute_descriptors(self):
         smiles_col = self.config.data['smiles_col']
         self.data["Properties"] = self.data[smiles_col].apply(descriptors.compute_physicochemical_properties)
-        self.fps = [descriptors.compute_morgan_fingerprint(smi) for smi in self.data[smiles_col]]
-        return self.fps, self.data
+        desc_type = self.config.analysis.get('descriptor', 'morgan')
+        self.fps = [descriptors.compute_fingerprint(smi, method=desc_type) for smi in self.data[smiles_col]]
 
     def compute_similarity(self, n_jobs: int = -1):
         self.sim_matrix = similarity.compute_similarity_matrix(self.fps, n_jobs)

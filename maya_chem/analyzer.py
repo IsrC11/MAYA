@@ -63,13 +63,13 @@ class MayaAnalyzer:
         reductions = self.config.analysis['reduction_method']
 
         if isinstance(fingerprints, str):
-            fongerprints = [fingerprints]
+            fingerprints = [fingerprints]
         if isinstance(reductions, str):
             reductions = [reductions]
         
         results = []
 
-        for fp in figerprints:
+        for fp in fingerprints:
             for red in reductions:
                 self.config.analysis['fingerprint'] = fp
                 self.config.analysis['reduction_method'] = red

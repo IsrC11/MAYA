@@ -57,10 +57,29 @@ class MayaAnalyzer:
         return fig1, fig2
 
     
-    def run(self, save_prefix: str | None = None):
+    def run(self):
         self.load_data()
-        self.compute_descriptors()
-        self.compute_similarity()
-        reduction_method = self.config.analysis.get ('reduction:method', 'pca')
-        self.reduce_dimensions(method=reduction_method)
-        return self.visualize(show=True, save_prefix=save_prefix)
+        fingerprints = self.config.analysis['fingerprint']
+        reductions = self.config.analysis['reduction_method']
+
+        if isinstance(fingerprints, str):
+            fongerprints = [fingerprints]
+        if isinstance(reductions, str):
+            reductions = [reductions]
+        
+        results[]
+
+        for fp in figerprints:
+            for red in reductions:
+                self.config.analysis['fingerprint'] = fp
+                self.config.analysis['reduction_method'] = red
+
+                self.compute_descriptors()
+                self.compure_similarity()
+                self.reduce_dimensions(method=red)
+
+                save_prefix = f'{fp}_{red}'
+                figs = self.visualize(save_prefix=save_prefix, show=True)
+                results.append((fp, red, figs))
+        
+        return results

@@ -19,20 +19,20 @@ class MayaAnalyzer:
         self.data = utils.load_data(self.config.data_path, id_col=self.config.data['id_col'], smiles_col=self.config.data['smiles_col'])
         return self.data
 
-    def compute_descriptors(self):
+    def compute_descriptors(self, fp_type: str):
         smiles_col = self.config.data['smiles_col']
-        selected_props = self.config.analysis.get('properties', None)
-        self.data['Properties'] = self.data[smiles_col].apply(lambda smi: descriptors.compute_physicochemical_properties(smi, selected_props=selected_props))
-        fp_type = self.config.analysis.get('fingerprint', 'morgan')
+
+        props_series = self.data[smiles_col].apply(descriptors.compute_physicochemical_properties)
+        props_df = pd.DataFrame(list(props_series))
+        self.data = pd.concat([self.data, props_df], axis=1)
+        
         self.fps = [descriptors.compute_fingerprint(smi, method=fp_type) for smi in self.data[smiles_col]]
 
     def compute_similarity(self, n_jobs: int = -1):
         self.sim_matrix = similarity.compute_similarity_matrix(self.fps, n_jobs)
         return self.sim_matrix
 
-    def reduce_dimensions(self, method: str = None, n_components: int = 2):
-        
-        method = method or self.config.analysis.get('reduction_method', 'pca')
+    def reduce_dimensions(self, method: str = 'pca', n_components: int = 2):
         
         x = np.array([np.frombuffer(fp.ToBitString().encode('utf-8'), dtype='S1') for fp in self.fps])
         x = (x.view(np.uint8) - ord('0')).reshape(len(self.fps), -1)
@@ -58,7 +58,6 @@ class MayaAnalyzer:
 
     
     def run(self):
-        self.load_data()
         fingerprints = self.config.analysis['fingerprint']
         reductions = self.config.analysis['reduction_method']
 
@@ -67,14 +66,14 @@ class MayaAnalyzer:
         if isinstance(reductions, str):
             reductions = [reductions]
         
+        original_data = self.load_data()
         results = []
 
         for fp in fingerprints:
             for red in reductions:
-                self.config.analysis['fingerprint'] = fp
-                self.config.analysis['reduction_method'] = red
+                self.data = original_data.copy()
+                self.compute_descriptors(fp_type=fp)
 
-                self.compute_descriptors()
                 self.compute_similarity()
                 self.reduce_dimensions(method=red)
 

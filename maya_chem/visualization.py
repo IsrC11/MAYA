@@ -6,7 +6,7 @@ import pandas as pd
 def plot_similarity_heatmap(sim_matrix, labels, output_path: str | None = None, show: bool = True):
     """Plot heatmap of similarity matrix."""
     fig, ax = plt.subplots(figsize=(10, 8))
-    sns.heatmap(sim_matrix, xticklabels=False, yticklabels=False, cmap="viridis", ax=ax)
+    sns.heatmap(sim_matrix, xticklabels=False, yticklabels=False, cmap="magma", ax=ax)
     ax.set_title("Tanimoto Similarity Heatmap")
     if output_path:
         fig.savefig(output_path, dpi=600, bbox_inches="tight")

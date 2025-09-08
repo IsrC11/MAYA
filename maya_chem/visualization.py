@@ -18,7 +18,7 @@ def plot_scatter(df: pd.DataFrame, x: str, y: str, hue: str | None=None, output_
     """Scatter plot for chemical space visualization."""
     fig, ax =plt.subplots(figsize=(8, 6))
     sns.scatterplot(data=df, x=x, y=y, hue=hue, alpha=0.7, ax=ax)
-    ax.set_title(f'{fp.upper()}+{red.upper()}')
+    ax.set_title('Chemical Space')
     if output_path:
         fig.savefig(output_path, dpi=600, bbox_inches="tight")
     if show:

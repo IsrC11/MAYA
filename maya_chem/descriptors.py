@@ -12,7 +12,7 @@ def compute_morgan_fingerprint(smiles: str, radius: int = 2, nBits: int = 2048):
     gen = AllChem.GetMorganGenerator(radius=radius, fpSize=nBits)
     return gen.GetFingerprint(mol)
 
-def compute_maccs_fingerprin(smiles: str):
+def compute_maccs_fingerprint(smiles: str):
     """Compute MACCS kesys 166 bits"""
     mol = Chem.MolFromSmiles(smiles)
     if not mol:

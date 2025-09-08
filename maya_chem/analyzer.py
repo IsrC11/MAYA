@@ -1,6 +1,7 @@
 # maya/analyzer.py
 import pandas as pd
 import numpy as np
+from rdkit import DataStructs
 from .config import MayaConfig
 from .utils import load_data
 from . import utils, descriptors, similarity, reduction, visualization
@@ -60,5 +61,7 @@ class MayaAnalyzer:
         self.load_data()
         self.compute_descriptors()
         self.compute_similarity()
-        self.reduce_dimensions(method=self.config.data.get('reduction', 'pca'))
-        return self.visualize(show=True)
+        self.method= self.config.analysis.get('reduction_method', 'pca')
+        self.reduce_dimensions(method=reduction_method)
+        save_prefix = getattr(self, 'output_prefix', None)
+        return self.visualize(show=True, save_prefix=save_prefix)

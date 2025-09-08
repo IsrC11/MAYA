@@ -75,7 +75,7 @@ class MayaAnalyzer:
                 self.config.analysis['reduction_method'] = red
 
                 self.compute_descriptors()
-                self.compure_similarity()
+                self.compute_similarity()
                 self.reduce_dimensions(method=red)
 
                 save_prefix = f'{fp}_{red}'

@@ -67,7 +67,7 @@ class MayaAnalyzer:
         if isinstance(reductions, str):
             reductions = [reductions]
         
-        results[]
+        results = []
 
         for fp in figerprints:
             for red in reductions:

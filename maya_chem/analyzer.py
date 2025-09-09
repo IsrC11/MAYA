@@ -53,7 +53,7 @@ class MayaAnalyzer:
     def visualize(self, show: bool = True, save_prefix: str | None = None):
         fig1 =visualization.plot_similarity_heatmap(self.sim_matrix, labels=self.data[self.config.data['id_col']], output_path=f'{save_prefix}_heatmap.png' if save_prefix else None, show=show)
 
-        fig2 = visualization.plot_scatter(self.data, x='PC1', y='PC2', hue='MolWt' if 'MolWt' in self.data.columns else None, output_path=f'{save_prefix}_scatter.png' if save_prefix else None, show=show)
+        fig2 = visualization.plot_scatter(self.data, x='PC1', y='PC2', hue='MolWt' if 'MolWt' in self.data.columns else None, output_path=f'{save_prefix}_scatter.png' if save_prefix else None, show=show, title=title)
         return fig1, fig2
 
     

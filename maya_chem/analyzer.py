@@ -70,16 +70,19 @@ class MayaAnalyzer:
         results = []
 
         for fp in fingerprints:
+            self.data = original_data.copy()
+            self.compute_descriptors(fp_type=fp)
+            self.compute_similarity()
+            heatmap_title = f'Tanimoto Heatmap - {fp.upper()}'
+            heatmap_figure = visualization.plot_similarity_heatmap(self.sim_matrix, labels=False, output_path = f'{self.config.viz['output_dir']}/{fp}_heatmap.png', show=True, title=heatmap_title)
+            results.append((fp, 'heatmap', heatmap_fig))
+            
             for red in reductions:
-                self.data = original_data.copy()
-                self.compute_descriptors(fp_type=fp)
 
-                self.compute_similarity()
-                self.reduce_dimensions(method=red)
-
+                reduced = self.reduced_dimensions(method_red)
                 save_prefix = f'{fp}_{red}'
-                title = f'{fp.upper()} + {red.upper()}'
-                figs = self.visualize(save_prefix=save_prefix, show=True, title=title)
+                scatter_title = f'{fp.upper()} + {red.upper()}'
+                figs = self.visualize(save_prefix=save_prefix, show=True, title=scatter_title)
                 results.append((fp, red, figs))
         
         return results

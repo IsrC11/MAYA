@@ -78,7 +78,8 @@ class MayaAnalyzer:
                 self.reduce_dimensions(method=red)
 
                 save_prefix = f'{fp}_{red}'
-                figs = self.visualize(save_prefix=save_prefix, show=True)
+                title = f'{fp.upper()} + {red.upper()}'
+                figs = self.visualize(save_prefix=save_prefix, show=True, title=title)
                 results.append((fp, red, figs))
         
         return results

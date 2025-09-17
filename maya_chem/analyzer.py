@@ -82,7 +82,7 @@ class MayaAnalyzer:
             
             for red in reductions:
 
-                reduced = self.reduced_dimensions(method_red)
+                reduced = self.reduced_dimensions(method=red)
                 save_prefix = f'{fp}_{red}'
                 heatmap_title = f'Tanimoto Heatmap - {fp.upper()}'
                 scatter_title = f'{fp.upper()} + {red.upper()}'

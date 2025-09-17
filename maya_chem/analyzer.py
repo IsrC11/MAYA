@@ -67,7 +67,7 @@ class MayaAnalyzer:
         if isinstance(reductions, str):
             reductions = [reductions]
         
-        output_dir = '/content/MAYA/maya_chem/colab/results'
+        output_dir = '/content/MAYA/maya_chem/colab_results'
         os.makedirs(output_dir, exist_ok=True)
         
         original_data = self.load_data()

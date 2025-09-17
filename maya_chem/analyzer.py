@@ -51,8 +51,8 @@ class MayaAnalyzer:
         self.data=pd.concat([self.data, coords], axis=1)
         return coords
         
-    def visualize(self, show: bool = True, save_prefix: str | None = None, title:str = 'Chemical Space'):
-        fig1 =visualization.plot_similarity_heatmap(self.sim_matrix, labels=self.data[self.config.data['id_col']], output_path=f'{save_prefix}_heatmap.png' if save_prefix else None, show=show, title = f'Tanimoto hratmap - {fp.upper()}')
+    def visualize(self, show: bool = True, save_prefix: str | None = None, title:str = 'Chemical Space', heatmap_title: str = 'Tanimoto Heatmap):
+        fig1 =visualization.plot_similarity_heatmap(self.sim_matrix, labels=self.data[self.config.data['id_col']], output_path=f'{save_prefix}_heatmap.png' if save_prefix else None, show=show, title =heatmap_title)
 
         fig2 = visualization.plot_scatter(self.data, x='PC1', y='PC2', hue='MolWt' if 'MolWt' in self.data.columns else None, output_path=f'{save_prefix}_scatter.png' if save_prefix else None, show=show, title=title)
         return fig1, fig2
@@ -85,8 +85,9 @@ class MayaAnalyzer:
 
                 reduced = self.reduced_dimensions(method_red)
                 save_prefix = f'{fp}_{red}'
+                heatmap_title = f'Tanimoto Heatmap - {fp.upper()}'
                 scatter_title = f'{fp.upper()} + {red.upper()}'
-                figs = self.visualize(save_prefix=save_prefix, show=True, title=scatter_title)
+                figs = self.visualize(save_prefix=save_prefix, show=True, title=scatter_title, heatmap_title=heatmap_title)
                 results.append((fp, red, figs))
         
         return results

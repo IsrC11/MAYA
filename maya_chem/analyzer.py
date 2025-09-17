@@ -78,7 +78,7 @@ class MayaAnalyzer:
             self.compute_similarity()
             heatmap_title = f'Tanimoto Heatmap - {fp.upper()}'
             heatmap_figure = visualization.plot_similarity_heatmap(self.sim_matrix, labels=False, output_path = f'{self.config.viz['output_dir']}/{fp}_heatmap.png', show=True, title=heatmap_title)
-            results.append((fp, 'heatmap', heatmap_fig))
+            results.append((fp, 'heatmap', heatmap_figure))
             
             for red in reductions:
 

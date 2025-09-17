@@ -67,7 +67,7 @@ class MayaAnalyzer:
         if isinstance(reductions, str):
             reductions = [reductions]
         
-        os.makedirs(self.config.viz['output_dir'], exit_ok=True)
+        os.makedirs(self.config.viz['output_dir'], exist_ok=True)
         
         original_data = self.load_data()
         results = []

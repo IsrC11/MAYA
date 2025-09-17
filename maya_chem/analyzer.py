@@ -66,6 +66,9 @@ class MayaAnalyzer:
         if isinstance(reductions, str):
             reductions = [reductions]
         
+        output_dir = '/content/MAYA/colab/results'
+        os.makedirs(output_dir, exist_ok=True)
+        
         original_data = self.load_data()
         results = []
 

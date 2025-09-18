@@ -52,6 +52,13 @@ class MayaAnalyzer:
         return coords
         
     def visualize(self, show: bool = True, save_prefix: str | None = None, title:str = 'Chemical Space', heatmap_title: str = 'Tanimoto Heatmap'):
+        coords_cold = [col for col in self.data.columns if col,startswitth('PCA') or col.startswith('Dim')]
+
+        if len(coords_cols) < 2:
+            raise ValueError('At least two reduction columns (PC1/PC2 or Dim1/Dim2) were not found')
+
+        x_col, y_col = coord_cols[:2]
+        
         fig1 =visualization.plot_similarity_heatmap(self.sim_matrix, labels=self.data[self.config.data['id_col']], output_path=f'{save_prefix}_heatmap.png' if save_prefix else None, show=show, title =heatmap_title)
 
         fig2 = visualization.plot_scatter(self.data, x='PC1', y='PC2', hue='MolWt' if 'MolWt' in self.data.columns else None, output_path=f'{save_prefix}_scatter.png' if save_prefix else None, show=show, title=title)
@@ -77,11 +84,11 @@ class MayaAnalyzer:
             self.compute_descriptors(fp_type=fp)
             self.compute_similarity()
             heatmap_title = f'Tanimoto Heatmap - {fp.upper()}'
-            heatmap_figure = visualization.plot_similarity_heatmap(self.sim_matrix, labels=False, output_path = f'{self.config.viz['output_dir']}/{fp}_heatmap.png', show=True, title=heatmap_title)
+            heatmap_path = f'{self.config.viz['output_dir']}/{fp}_heatmap.png'
+            heatmap_figure = visualization.plot_similarity_heatmap(self.sim_matrix, labels=False, output_path = heatmap_path, show=True, title=heatmap_title)
             results.append((fp, 'heatmap', heatmap_figure))
             
             for red in reductions:
-
                 reduced = self.reduce_dimensions(method=red)
                 save_prefix = f'{fp}_{red}'
                 heatmap_title = f'Tanimoto Heatmap - {fp.upper()}'

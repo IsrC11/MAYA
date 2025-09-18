@@ -52,7 +52,7 @@ class MayaAnalyzer:
         return coords
         
     def visualize(self, show: bool = True, save_prefix: str | None = None, title:str = 'Chemical Space', heatmap_title: str = 'Tanimoto Heatmap'):
-        coords_cold = [col for col in self.data.columns if col,startswitth('PCA') or col.startswith('Dim')]
+        coords_cold = [col for col in self.data.columns if col.startswith('PCA') or col.startswith('Dim')]
 
         if len(coords_cols) < 2:
             raise ValueError('At least two reduction columns (PC1/PC2 or Dim1/Dim2) were not found')

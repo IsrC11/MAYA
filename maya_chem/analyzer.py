@@ -61,7 +61,7 @@ class MayaAnalyzer:
         
         fig1 =visualization.plot_similarity_heatmap(self.sim_matrix, labels=self.data[self.config.data['id_col']], output_path=f'{save_prefix}_heatmap.png' if save_prefix else None, show=show, title =heatmap_title)
 
-        fig2 = visualization.plot_scatter(self.data, x='PC1', y='PC2', hue='MolWt' if 'MolWt' in self.data.columns else None, output_path=f'{save_prefix}_scatter.png' if save_prefix else None, show=show, title=title)
+        fig2 = visualization.plot_scatter(self.data, x=x_col, y=y_col, hue='MolWt' if 'MolWt' in self.data.columns else None, output_path=f'{save_prefix}_scatter.png' if save_prefix else None, show=show, title=title)
         return fig1, fig2
 
     
@@ -93,6 +93,7 @@ class MayaAnalyzer:
                 save_prefix = f'{fp}_{red}'
                 heatmap_title = f'Tanimoto Heatmap - {fp.upper()}'
                 scatter_title = f'{fp.upper()} + {red.upper()}'
+                x_col, y_col = f'{red.upper}'
                 figs = self.visualize(save_prefix=save_prefix, show=True, title=scatter_title, heatmap_title=heatmap_title)
                 results.append((fp, red, figs))
         

@@ -47,7 +47,7 @@ class MayaAnalyzer:
         else:
             raise ValueError(f'Unknown dimentionallity reduction method: {method}')
 
-        coords.columns = [f'PC{i+1}' for i in range(coords.shape[1])]
+        coords = pd.DataFrame(coords, index=self.data.index, columns=[f'{method.upper()}_{i+1}' for i in range(coords.shape[1])])
         self.data=pd.concat([self.data, coords], axis=1)
         return coords
         

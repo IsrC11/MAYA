@@ -57,7 +57,7 @@ class MayaAnalyzer:
         if len(coords_cols) < 2:
             raise ValueError('At least two reduction columns (PC1/PC2 or Dim1/Dim2) were not found')
 
-        x_col, y_col = coord_cols[:2]
+        x_col, y_col = coords_cols[:2]
         
         fig1 =visualization.plot_similarity_heatmap(self.sim_matrix, labels=self.data[self.config.data['id_col']], output_path=f'{save_prefix}_heatmap.png' if save_prefix else None, show=show, title =heatmap_title)
 

@@ -93,7 +93,6 @@ class MayaAnalyzer:
                 save_prefix = f'{fp}_{red}'
                 heatmap_title = f'Tanimoto Heatmap - {fp.upper()}'
                 scatter_title = f'{fp.upper()} + {red.upper()}'
-                x_col, y_col = f'{red.upper}'
                 figs = self.visualize(save_prefix=save_prefix, show=True, title=scatter_title, heatmap_title=heatmap_title)
                 results.append((fp, red, figs))
         

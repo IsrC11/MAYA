@@ -37,13 +37,16 @@ class MayaAnalyzer:
         
         x = np.array([np.frombuffer(fp.ToBitString().encode('utf-8'), dtype='S1') for fp in self.fps])
         x = (x.view(np.uint8) - ord('0')).reshape(len(self.fps), -1)
-        
-        if method.lower() == 'pca':
+        method_lower = method.lower()
+        if method_lower == 'pca':
             coords = reduction.apply_pca(x, n_components=n_components)
-        elif method.lower() == 'tsne':
-            coords = reduction. apply_tsne(x, n_components=n_components)    
-        elif method.lower() == 'umap':
+            prefix = 'PCA'
+        elif method_lower == 'tsne':
+            coords = reduction. apply_tsne(x, n_components=n_components) 
+            prefix = 'Dimension'
+        elif method_lower 'umap':
             coords = reduction.apply_umap(x, n_components=n_components)
+            prefix = 'Dimension'
         else:
             raise ValueError(f'Unknown dimentionallity reduction method: {method}')
 

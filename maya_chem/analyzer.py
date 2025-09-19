@@ -44,7 +44,7 @@ class MayaAnalyzer:
         elif method_lower == 'tsne':
             coords = reduction. apply_tsne(x, n_components=n_components) 
             prefix = 'Dimension'
-        elif method_lower 'umap':
+        elif method_lower == 'umap':
             coords = reduction.apply_umap(x, n_components=n_components)
             prefix = 'Dimension'
         else:

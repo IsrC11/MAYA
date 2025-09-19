@@ -43,14 +43,14 @@ class MayaAnalyzer:
             prefix = 'PCA'
         elif method_lower == 'tsne':
             coords = reduction. apply_tsne(x, n_components=n_components) 
-            prefix = 'Dimension'
+            prefix = 'Dim'
         elif method_lower == 'umap':
             coords = reduction.apply_umap(x, n_components=n_components)
-            prefix = 'Dimension'
+            prefix = 'Dim'
         else:
             raise ValueError(f'Unknown dimentionallity reduction method: {method}')
 
-        coords = pd.DataFrame(coords, index=self.data.index, columns=[f'{method.upper()}_{i+1}' for i in range(coords.shape[1])])
+        coords = pd.DataFrame(coords, index=self.data.index, columns=[f'{prefix}{i+1}' for i in range(coords.shape[1])])
         self.data=pd.concat([self.data, coords], axis=1)
         return coords
         
@@ -62,10 +62,8 @@ class MayaAnalyzer:
 
         x_col, y_col = coords_cols[:2]
         
-        fig1 =visualization.plot_similarity_heatmap(self.sim_matrix, labels=self.data[self.config.data['id_col']], output_path=f'{save_prefix}_heatmap.png' if save_prefix else None, show=show, title =heatmap_title)
-
         fig2 = visualization.plot_scatter(self.data, x=x_col, y=y_col, hue='MolWt' if 'MolWt' in self.data.columns else None, output_path=f'{save_prefix}_scatter.png' if save_prefix else None, show=show, title=title)
-        return fig1, fig2
+        return fig2
 
     
     def run(self):
@@ -87,7 +85,7 @@ class MayaAnalyzer:
             self.compute_descriptors(fp_type=fp)
             self.compute_similarity()
             heatmap_title = f'Tanimoto Heatmap - {fp.upper()}'
-            heatmap_path = f'{self.config.viz['output_dir']}/{fp}_heatmap.png'
+            heatmap_path = f"{self.config.viz['output_dir']}/{fp}_heatmap.png"
             heatmap_figure = visualization.plot_similarity_heatmap(self.sim_matrix, labels=False, output_path = heatmap_path, show=True, title=heatmap_title)
             results.append((fp, 'heatmap', heatmap_figure))
             

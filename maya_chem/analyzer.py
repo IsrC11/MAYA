@@ -54,15 +54,19 @@ class MayaAnalyzer:
         self.data=pd.concat([self.data, coords], axis=1)
         return coords
         
-    def visualize(self, show: bool = True, save_prefix: str | None = None, title:str = 'Chemical Space', heatmap_title: str = 'Tanimoto Heatmap'):
+    def visualize(self, show: bool = True, save_prefix: str | None = None, title:str = 'Chemical Space', heatmap_title: str = 'Tanimoto Heatmap', interactive_mode: bool = False):
         coords_cols = [col for col in self.data.columns if col.startswith('PCA') or col.startswith('Dim')]
 
         if len(coords_cols) < 2:
             raise ValueError('At least two reduction columns (PC1/PC2 or Dim1/Dim2) were not found')
 
         x_col, y_col = coords_cols[:2]
+
+        if interactive_mode:
+            fig2 = interactive.plot_interactive_scatter(df=self.data, x=x_col, y=y_col, smiels_col=self.data[smiles_col], color_col = 'MolWt' if 'MolWt' in self.data.columns else None, id_col=self.config.data['id_col', title=title, output_path = f'{save_prefix}_interactive.html' if save_prefix else None])
+        else:
+            fig2 = visualization.plot_scatter(self.data, x=x_col, y=y_col, hue='MolWt' if 'MolWt' in self.data.columns else None, output_path=f'{save_prefix}_scatter.png' if save_prefix else None, show=show, title=title)
         
-        fig2 = visualization.plot_scatter(self.data, x=x_col, y=y_col, hue='MolWt' if 'MolWt' in self.data.columns else None, output_path=f'{save_prefix}_scatter.png' if save_prefix else None, show=show, title=title)
         return fig2
 
     

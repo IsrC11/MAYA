@@ -62,7 +62,7 @@ class MayaAnalyzer:
 
         x_col, y_col = coords_cols[:2]
 
-        caption_cols = [self.config.data['smiles_col'], x_col, y_col]
+        hover_cols = [self.config.data['smiles_col'], x_col, y_col]
 
         if interactive_mode:
             import molplotly
@@ -71,7 +71,7 @@ class MayaAnalyzer:
  
             try:
                 fig=go.Figure() 
-                app = molplotly.add_molecules(fig=fig, df=self.data, smiles_col=self.config.data['smiles_col'], title_col=self.config.data['id_col'], color_col='MolWt' if 'MolWt' in self.data.columns else None, caption_cols=caption_cols)
+                app = molplotly.add_molecules(fig=fig, df=self.data, smiles_col=self.config.data['smiles_col'], title_col=self.config.data['id_col'], color_col='MolWt' if 'MolWt' in self.data.columns else None, hover_cols=hover_cols)
                 app.run_server(mode='inline', port=8060, debug=False)
                 fig2 = app
             except Exception as e:

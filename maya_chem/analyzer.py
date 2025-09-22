@@ -65,6 +65,7 @@ class MayaAnalyzer:
         if interactive_mode:
             import molplotly
             from jupyter_dash import JupyterDash
+            from plotly import graph_objects as go
             try:
                 fig=go.Figure() 
                 app = molplotly.add_molecules(fig=fig, df=self.data, smiles_col=self.config.data['smiles_col'], title_col=self.config.data['id_col'], color_col='MolWt' if 'MolWt' in self.data.columns else None, caption_cols=[self.config.data['smiles_col'], x_col, y_col])

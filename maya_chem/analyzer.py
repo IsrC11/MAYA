@@ -62,7 +62,7 @@ class MayaAnalyzer:
 
         x_col, y_col = coords_cols[:2]
 
-        caption_cols = [self.config.data['smiles_col', x_col, y_col]]
+        caption_cols = [self.config.data['smiles_col'], x_col, y_col]
 
         if interactive_mode:
             import molplotly

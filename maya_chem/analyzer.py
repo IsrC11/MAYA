@@ -62,14 +62,13 @@ class MayaAnalyzer:
 
         x_col, y_col = coords_cols[:2]
 
+        caption_cols = [self.config.data['smiles_col', x_col, y_col]]
+
         if interactive_mode:
             import molplotly
             from jupyter_dash import JupyterDash
             from plotly import graph_objects as go
-
-            coords_cols = [col for col in self.data.columns if col.startswith('PCA') or col.startswith('Dim')]
-            caption_cols = [self.config.data['smiles_col']] + coords_cols[:2]
-            
+ 
             try:
                 fig=go.Figure() 
                 app = molplotly.add_molecules(fig=fig, df=self.data, smiles_col=self.config.data['smiles_col'], title_col=self.config.data['id_col'], color_col='MolWt' if 'MolWt' in self.data.columns else None, caption_cols=caption_cols)

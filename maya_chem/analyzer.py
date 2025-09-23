@@ -57,7 +57,8 @@ class MayaAnalyzer:
     def visualize(self, show: bool = True, save_prefix: str | None = None, title:str = 'Chemical Space', heatmap_title: str = 'Tanimoto Heatmap', interactive_mode: bool = False):
         coords_cols = [col for col in self.data.columns if col.startswith('PCA') or col.startswith('Dim')]
         import plotly.express as px
-        from molplotly import add_molecules, serve_kernel_port_as_iframe
+        from molplotly import add_molecules
+        from google.colab.output import serve_kernel_port_as_iframe
         from .visualization import plot_similiarity_heatmap
         
         if len(coords_cols) < 2:

@@ -59,7 +59,7 @@ class MayaAnalyzer:
         import plotly.express as px
         from molplotly import add_molecules
         from google.colab.output import serve_kernel_port_as_iframe
-        from .visualization import plot_similiarity_heatmap
+        from .visualization import plot_similarity_heatmap
         
         if len(coords_cols) < 2:
             raise ValueError('At least two reduction columns (PC1/PC2 or Dim1/Dim2) were not found')

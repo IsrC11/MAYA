@@ -56,8 +56,11 @@ class MayaAnalyzer:
         
     def visualize(self, show: bool = True, save_prefix: str | None = None, title:str = 'Chemical Space', heatmap_title: str = 'Tanimoto Heatmap', interactive_mode: bool = False):
         coords_cols = [col for col in self.data.columns if col.startswith('PCA') or col.startswith('Dim')]
-
-        if len(coords_cols) < 2:
+        import plotly.express as px
+        from molplotly import add_molecules, serve_kernel_port_as_iframe
+        from .visualization import plot_similiarity_heatmap
+        
+       if len(coords_cols) < 2:
             raise ValueError('At least two reduction columns (PC1/PC2 or Dim1/Dim2) were not found')
 
         x_col, y_col = coords_cols[:2]
@@ -70,10 +73,11 @@ class MayaAnalyzer:
             from plotly import graph_objects as go
  
             try:
-                fig=go.Figure() 
+                fig= px.scatter(self.data, x=x_col, y=y_col, color='MolWt' if 'MolWt'in self.data.columns else None, title=title, width=1200, height=900)
                 app = molplotly.add_molecules(fig=fig, df=self.data, smiles_col=self.config.data['smiles_col'], title_col=self.config.data['id_col'], color_col='MolWt' if 'MolWt' in self.data.columns else None)
-                app.run_server(mode='inline', port=8060, debug=False)
-                fig2 = app
+                serve_kernel_port_as_iframe('localhost')
+                app.run(port=8060)
+                fig2=app
             except Exception as e:
                 raise RuntimeError(f'Error to generate interactive graph with Dash: {e}')
         else:

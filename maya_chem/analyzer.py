@@ -60,14 +60,14 @@ class MayaAnalyzer:
         from molplotly import add_molecules, serve_kernel_port_as_iframe
         from .visualization import plot_similiarity_heatmap
         
-       if len(coords_cols) < 2:
+        if len(coords_cols) < 2:
             raise ValueError('At least two reduction columns (PC1/PC2 or Dim1/Dim2) were not found')
 
         x_col, y_col = coords_cols[:2]
 
         hover_cols = [self.config.data['smiles_col'], x_col, y_col]
 
-       if interactive_mode:
+        if interactive_mode:
             import molplotly
             from jupyter_dash import JupyterDash
             from plotly import graph_objects as go
@@ -80,10 +80,10 @@ class MayaAnalyzer:
                 fig2=app
             except Exception as e:
                 raise RuntimeError(f'Error to generate interactive graph with Dash: {e}')
-       else:
+        else:
             fig2 = visualization.plot_scatter(self.data, x=x_col, y=y_col, hue='MolWt' if 'MolWt' in self.data.columns else None, output_path=f'{save_prefix}_scatter.png' if save_prefix else None, show=show, title=title)
         
-       return fig2
+        return fig2
 
     
     def run(self):

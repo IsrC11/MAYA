@@ -61,7 +61,7 @@ class MayaAnalyzer:
         from google.colab.output import serve_kernel_port_as_iframe
         from .visualization import plot_similarity_heatmap
         from dash import Dash, dcc, html, Input, Output
-        from jupyter_dash import jupyterDash
+        from jupyter_dash import JupyterDash
         
         if len(coords_cols) < 2:
             raise ValueError('At least two reduction columns (PC1/PC2 or Dim1/Dim2) were not found')

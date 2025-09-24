@@ -71,7 +71,7 @@ class MayaAnalyzer:
 
         if save_prefix:
             from . import visualization
-            visualization.plot__scatter(self.data, x=x_col, y=y_col, hue='MolWt' if 'MolWt' in self.data.columns else None, output_path=f'{save_prefix}_scatter.png', show=False, title=title)
+            visualization.plot_scatter(self.data, x=x_col, y=y_col, hue='MolWt' if 'MolWt' in self.data.columns else None, output_path=f'{save_prefix}_scatter.png', show=False, title=title)
 
         if interactive_mode:
             import molplotly

@@ -69,6 +69,10 @@ class MayaAnalyzer:
 
         hover_cols = [self.config.data['smiles_col'], x_col, y_col]
 
+        if save_prefix:
+            from . import visualization
+            visualization.plot__scatter(self.data, x=x_col, y=y_col, hue='MolWt' if 'MolWt' in self.data.columns else None, output_path=f'{save_prefix}_scatter.png' show=False, title=title)
+
         if interactive_mode:
             import molplotly
             from jupyter_dash import JupyterDash
@@ -79,7 +83,7 @@ class MayaAnalyzer:
                 fig = molplotly.add_molecules(fig=fig, df=self.data, smiles_col=self.config.data['smiles_col'], title_col=self.config.data['id_col'], color_col='MolWt' if 'MolWt' in self.data.columns else None)
 
                 app = Dash(__name__)
-                options = [{'label':f'{fp}', 'value':fp} for fp in seld.data['Fingerprint'].unique()] if 'Fingerprint' in self.data.columns else [{'label': 'Default', 'value': 'default'}]
+                options = ([{'label': f'{fp}', 'value': fp} for fp in self.data['Fingerprint'].unique()] if 'Fingerprint' in self.data.columns else [{'label': 'Default', 'value':'default'}])
                 app.layout = html.Div([html.H3('Chemical Space Interactive Viewer'), dcc.Dropdown(id='combo-selector', options=options, value=options[0]['value'], clearable=False), dcc.Graph(id='scatter-plot', figure=fig),])
                 @app.callback(Output('scatter-plot', 'figure'), Input('combo-selector', 'value'))
                 
@@ -130,7 +134,7 @@ class MayaAnalyzer:
                 save_prefix = f'{fp}_{red}'
                 heatmap_title = f'Tanimoto Heatmap - {fp.upper()}'
                 scatter_title = f'{fp.upper()} + {red.upper()}'
-                figs = self.visualize(save_prefix=save_prefix, show=True, title=scatter_title, heatmap_title=heatmap_title)
+                figs = self.visualize(save_prefix=save_prefix, show=False, title=scatter_title, heatmap_title=heatmap_title, interactive_mode=False)
                 results.append((fp, red, figs))
         
         return results

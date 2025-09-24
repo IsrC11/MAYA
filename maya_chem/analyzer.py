@@ -60,7 +60,7 @@ class MayaAnalyzer:
         from molplotly import add_molecules
         from google.colab.output import serve_kernel_port_as_iframe
         from .visualization import plot_similarity_heatmap
-        from dash import Dash, dcc, html, Input, Output
+        from dash import dcc, html, Input, Output
         from jupyter_dash import JupyterDash
         
         if len(coords_cols) < 2:
@@ -97,7 +97,7 @@ class MayaAnalyzer:
                     return fig
 
                 #serve_kernel_port_as_iframe('localhost', 8050)
-                app.run_server(mode='inline', port=8050)
+                app.run_server(mode='inline', port=8050, debug=False)
                 return app
                 
             except Exception as e:

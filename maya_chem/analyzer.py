@@ -137,6 +137,6 @@ class MayaAnalyzer:
                 scatter_title = f'{fp.upper()} + {red.upper()}'
                 figs = self.visualize(save_prefix=save_prefix, show=False, title=scatter_title, heatmap_title=heatmap_title, interactive_mode=True, port=port)
                 results.append((fp, red, figs))
-                port+=10
+                port+=3
         
         return results

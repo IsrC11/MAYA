@@ -82,21 +82,21 @@ class MayaAnalyzer:
                 fig= px.scatter(self.data, x=x_col, y=y_col, color='MolWt' if 'MolWt'in self.data.columns else None, title=title, width=1200, height=900)
                 fig = molplotly.add_molecules(fig=fig, df=self.data, smiles_col=self.config.data['smiles_col'], title_col=self.config.data['id_col'], color_col='MolWt' if 'MolWt' in self.data.columns else None)
 
-                app = Dash(__name__)
-                options = ([{'label': f'{fp}', 'value': fp} for fp in self.data['Fingerprint'].unique()] if 'Fingerprint' in self.data.columns else [{'label': 'Default', 'value':'default'}])
-                app.layout = html.Div([html.H3('Chemical Space Interactive Viewer'), dcc.Dropdown(id='combo-selector', options=options, value=options[0]['value'], clearable=False), dcc.Graph(id='scatter-plot', figure=fig),])
-                @app.callback(Output('scatter-plot', 'figure'), Input('combo-selector', 'value'))
+                #app = Dash(__name__)
+                #options = ([{'label': f'{fp}', 'value': fp} for fp in self.data['Fingerprint'].unique()] if 'Fingerprint' in self.data.columns else [{'label': 'Default', 'value':'default'}])
+                #app.layout = html.Div([html.H3('Chemical Space Interactive Viewer'), dcc.Dropdown(id='combo-selector', options=options, value=options[0]['value'], clearable=False), dcc.Graph(id='scatter-plot', figure=fig),])
+                #@app.callback(Output('scatter-plot', 'figure'), Input('combo-selector', 'value'))
                 
 
-                def update_plot(selected_fp):
-                    df_filtered = self.data[self.data['Fingerprint']==selected_fp] if 'Fingerprint' in self.data.columns else self.data
+                #def update_plot(selected_fp):
+                    #df_filtered = self.data[self.data['Fingerprint']==selected_fp] if 'Fingerprint' in self.data.columns else self.data
 
-                    fig = px.scatter(df_filtered, x=x_col, y=y_col, color='MolWt' if 'MolWt'in self.data.columns else None, title=title, width=1200, height=900)
-                    fig = molplotly.add_molecules(fig=fig, df=df_filtered, smiles_col=self.config.data['smiles_col'], title_col=self.config.data['id_col'], color_col = 'MolWt' if 'MolWt'in self.data.columns else None)
-                    return fig
+                    #fig = px.scatter(df_filtered, x=x_col, y=y_col, color='MolWt' if 'MolWt'in self.data.columns else None, title=title, width=1200, height=900)
+                    #fig = molplotly.add_molecules(fig=fig, df=df_filtered, smiles_col=self.config.data['smiles_col'], title_col=self.config.data['id_col'], color_col = 'MolWt' if 'MolWt'in self.data.columns else None)
+                    #return fig
 
-                serve_kernel_port_as_iframe('localhost', port)
-                app.run(port=port, debug=False, use_reloader=False)
+                serve_kernel_port_as_iframe('localhost')
+                fig.run(port=port, debug=False, use_reloader=False)
                 return app
                 
             except Exception as e:

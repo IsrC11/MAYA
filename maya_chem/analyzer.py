@@ -96,7 +96,7 @@ class MayaAnalyzer:
                     return fig
 
                 serve_kernel_port_as_iframe('localhost', 8050)
-                app.run_server(port=8050, debug=False)
+                app.run(port=8050, debug=False)
                 return app
                 
             except Exception as e:

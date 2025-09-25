@@ -54,7 +54,7 @@ class MayaAnalyzer:
         self.data=pd.concat([self.data, coords], axis=1)
         return coords
         
-    def visualize(self, show: bool = True, save_prefix: str | None = None, title:str = 'Chemical Space', heatmap_title: str = 'Tanimoto Heatmap', interactive_mode: bool = False):
+    def visualize(self, show: bool = True, save_prefix: str | None = None, title:str = 'Chemical Space', heatmap_title: str = 'Tanimoto Heatmap', interactive_mode: bool = False, port: int = 8050):
         coords_cols = [col for col in self.data.columns if col.startswith('PCA') or col.startswith('Dim')]
         import plotly.express as px
         from molplotly import add_molecules
@@ -95,8 +95,8 @@ class MayaAnalyzer:
                     fig = molplotly.add_molecules(fig=fig, df=df_filtered, smiles_col=self.config.data['smiles_col'], title_col=self.config.data['id_col'], color_col = 'MolWt' if 'MolWt'in self.data.columns else None)
                     return fig
 
-                serve_kernel_port_as_iframe('localhost', 8050)
-                app.run(port=8050, debug=False)
+                serve_kernel_port_as_iframe('localhost', port)
+                app.run(port=port, debug=False, use_reloader=False)
                 return app
                 
             except Exception as e:
@@ -118,6 +118,7 @@ class MayaAnalyzer:
         
         original_data = self.load_data()
         results = []
+        port=8050
 
         for fp in fingerprints:
             self.data = original_data.copy()
@@ -134,7 +135,8 @@ class MayaAnalyzer:
                 save_prefix = f'{fp}_{red}'
                 heatmap_title = f'Tanimoto Heatmap - {fp.upper()}'
                 scatter_title = f'{fp.upper()} + {red.upper()}'
-                figs = self.visualize(save_prefix=save_prefix, show=False, title=scatter_title, heatmap_title=heatmap_title, interactive_mode=True)
+                figs = self.visualize(save_prefix=save_prefix, show=False, title=scatter_title, heatmap_title=heatmap_title, interactive_mode=True, port=port)
                 results.append((fp, red, figs))
+                port+=10
         
         return results

@@ -69,9 +69,13 @@ class MayaAnalyzer:
 
         hover_cols = [self.config.data['smiles_col'], x_col, y_col]
 
+        color_col = self.config.viz.get('color_by',None)
+        if color_col not in self.data.columns:
+            color_col = None
+
         if save_prefix:
             from . import visualization
-            visualization.plot_scatter(self.data, x=x_col, y=y_col, hue='MolWt' if 'MolWt' in self.data.columns else None, output_path=f'{save_prefix}_scatter.png', show=False, title=title)
+            visualization.plot_scatter(self.data, x=x_col, y=y_col, hue=color_col, output_path=f'{save_prefix}_scatter.png', show=False, title=title)
 
         if interactive_mode:
             import molplotly
@@ -79,8 +83,8 @@ class MayaAnalyzer:
             from plotly import graph_objects as go
  
             try:
-                fig= px.scatter(self.data, x=x_col, y=y_col, color='MolWt' if 'MolWt'in self.data.columns else None, title=title, width=900, height=700)
-                fig = molplotly.add_molecules(fig=fig, df=self.data, smiles_col=self.config.data['smiles_col'], title_col=self.config.data['id_col'], color_col='MolWt' if 'MolWt' in self.data.columns else None)
+                fig= px.scatter(self.data, x=x_col, y=y_col, color=color_col, title=title, width=900, height=700, color_continuous_scale='viridis' if color_col else None)
+                fig = molplotly.add_molecules(fig=fig, df=self.data, smiles_col=self.config.data['smiles_col'], title_col=self.config.data['id_col'], color_col=color_col)
                 serve_kernel_port_as_iframe('localhost')
                 fig.run(port=port, debug=False, use_reloader=False)
                 return fig

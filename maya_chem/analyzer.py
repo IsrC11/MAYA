@@ -97,7 +97,7 @@ class MayaAnalyzer:
 
                 serve_kernel_port_as_iframe('localhost')
                 fig.run(port=port, debug=False, use_reloader=False)
-                return app
+                return fig
                 
             except Exception as e:
                 raise RuntimeError(f'Error to generate interactive graph with Dash: {e}')

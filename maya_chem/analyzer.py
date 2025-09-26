@@ -26,6 +26,8 @@ class MayaAnalyzer:
         props_series = self.data[smiles_col].apply(descriptors.compute_physicochemical_properties)
         props_df = pd.DataFrame(list(props_series))
         self.data = pd.concat([self.data, props_df], axis=1)
+
+        print('Columnas después de agregar descriptores', self.data.columns.tolist())
         
         self.fps = [descriptors.compute_fingerprint(smi, method=fp_type) for smi in self.data[smiles_col]]
 

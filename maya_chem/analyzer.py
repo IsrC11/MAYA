@@ -125,6 +125,7 @@ class MayaAnalyzer:
             
             for red in reductions:
                 self.data = original_data.copy()
+                self.compute_descriptors(fp_type=fp)
                 reduced = self.reduce_dimensions(method=red)
                 save_prefix = f'{fp}_{red}'
                 heatmap_title = f'Tanimoto Heatmap - {fp.upper()}'

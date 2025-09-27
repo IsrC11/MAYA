@@ -71,6 +71,7 @@ class MayaAnalyzer:
 
         hover_cols = [self.config.data['smiles_col'], x_col, y_col]
 
+        pallete = self.config.viz.ger('palette', None)
         color_col = self.config.viz.get('color_by',None)
         if color_col not in self.data.columns:
             color_col = None

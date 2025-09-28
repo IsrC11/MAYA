@@ -74,11 +74,11 @@ class MayaAnalyzer:
         #if color_col not in self.data.columns:
             #color_col = None
 
-        if save_prefix:
-            from . import visualization
-            color_by = self.config.viz.get('color_by', None)
-            palette = self.config.viz.get('palette', None)
-            visualization.plot_scatter(self.data, x=x_col, y=y_col, hue=color_by if color_by in self.data.columns else None, palette = palette, output_path=f'{save_prefix}_scatter.png', show=False, title=title)
+        #if save_prefix:
+            #from . import visualization
+            #color_by = self.config.viz.get('color_by', None)
+            #palette = self.config.viz.get('palette', None)
+            #visualization.plot_scatter(self.data, x=x_col, y=y_col, hue=color_by if color_by in self.data.columns else None, palette = palette, output_path=f'{save_prefix}_scatter.png', show=False, title=title)
 
         if interactive_mode:
             import molplotly

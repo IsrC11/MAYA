@@ -54,7 +54,7 @@ class MayaAnalyzer:
         self.data=pd.concat([self.data, coords], axis=1)
         return coords
         
-    def visualize(self, show: bool = True, save_prefix: str | None = None, title:str | None = None, heatmap_title: str = 'Tanimoto Heatmap', interactive_mode: bool = False, port: int = 8050):
+    def visualize(self, show: bool = True, save_prefix: str | None = None, title:str, heatmap_title: str = 'Tanimoto Heatmap', interactive_mode: bool = False, port: int = 8050):
         coords_cols = [col for col in self.data.columns if col.startswith('PCA') or col.startswith('Dim')]
         import plotly.express as px
         from molplotly import add_molecules

@@ -52,7 +52,19 @@ class MayaAnalyzer:
 
         coords = pd.DataFrame(coords, index=self.data.index, columns=[f'{prefix}{i+1}' for i in range(coords.shape[1])])
         self.data=pd.concat([self.data, coords], axis=1)
-        return coords
+
+        metrics = {}
+        if method_lower == 'pca'
+        loading = coords[:,:2]**2
+        loadings = loadings / loadings.sum(axis=0)
+        self.data[['PC1 contribution', 'PC2 contribution']] = loadings
+
+        trust = trustworthiness(x, coords)
+        corr = calculate_similarity_corrrelation(x, coords)
+        metrics = {'explained_variance': exp_var, 'trustworthiness': trust, 'correlation':corr}
+        print(f'PCA -> Trustworthiness: {trust:.3f}, Correlation: {corr:.2f}')
+        
+        return coords, metrics
         
     def visualize(self, show: bool = True, save_prefix: str | None = None, title:str = 'Chemical Space', heatmap_title: str = 'Tanimoto Heatmap', interactive_mode: bool = False, port: int = 8050):
         coords_cols = [col for col in self.data.columns if col.startswith('PCA') or col.startswith('Dim')]
@@ -123,12 +135,12 @@ class MayaAnalyzer:
             for red in reductions:
                 self.data = original_data.copy()
                 self.compute_descriptors(fp_type=fp)
-                reduced = self.reduce_dimensions(method=red)
+                reduced, metrics = self.reduce_dimensions(method=red)
                 save_prefix = f'{fp}_{red}'
                 heatmap_title = f'Tanimoto Heatmap - {fp.upper()}'
                 scatter_title = f'{fp.upper()} + {red.upper()}'
                 figs = self.visualize(save_prefix=save_prefix, show=False, title=scatter_title, heatmap_title=heatmap_title, interactive_mode=True, port=port)
-                results.append((fp, red, figs))
+                results.append((fp, red, figs, metrics))
                 port+=3
         
         return results

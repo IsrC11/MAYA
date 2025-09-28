@@ -71,8 +71,8 @@ class MayaAnalyzer:
 
         palette = self.config.viz.get('palette', None)
         color_col = self.config.viz.get('color_by',None)
-        if color_col not in self.data.columns:
-            color_col = None
+        #if color_col not in self.data.columns:
+            #color_col = None
 
         if save_prefix:
             from . import visualization

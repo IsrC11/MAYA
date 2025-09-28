@@ -89,7 +89,7 @@ class MayaAnalyzer:
                 fig= px.scatter(self.data, x=x_col, y=y_col, color=color_col, title=title, width=900, height=700, color_continuous_scale=palette if color_col else None)
                 fig = molplotly.add_molecules(fig=fig, df=self.data, smiles_col=self.config.data['smiles_col'], title_col=self.config.data['id_col'], color_col=color_col)
                 serve_kernel_port_as_iframe('localhost')
-                fig.run(port=port, debug=False, use_reloader=False)
+                #fig.run(port=port, debug=False, use_reloader=False)
                 return fig
                 
             except Exception as e:

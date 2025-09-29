@@ -63,7 +63,7 @@ class MayaAnalyzer:
         coor = results_eval['correlation']
         
         print(f'Trustworthiness ({method}): {trust:.3f}')
-        print(f'Correlation ({method}): {corr:3.f}')
+        print(f'Correlation ({method}): {coor:3.f}')
 
         
         return coords, results_eval, trust, coor

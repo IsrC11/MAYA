@@ -5,7 +5,7 @@ import numpy as np
 from rdkit import DataStructs
 from .config import MayaConfig
 from .utils import load_data
-from . import utils, descriptors, similarity, reduction, visualization, interactive
+from . import utils, descriptors, similarity, reduction, visualization, interactive, metrics
 
 class MayaAnalyzer:
     """Main class to run MAYA pipeline."""

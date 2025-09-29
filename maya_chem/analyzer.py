@@ -53,18 +53,15 @@ class MayaAnalyzer:
         coords = pd.DataFrame(coords, index=self.data.index, columns=[f'{prefix}{i+1}' for i in range(coords.shape[1])])
         self.data=pd.concat([self.data, coords], axis=1)
 
-        metrics = {}
-        if method_lower == 'pca'
-        loading = coords[:,:2]**2
-        loadings = loadings / loadings.sum(axis=0)
-        self.data[['PC1 contribution', 'PC2 contribution']] = loadings
 
-        trust = trustworthiness(x, coords)
-        corr = calculate_similarity_corrrelation(x, coords)
-        metrics = {'explained_variance': exp_var, 'trustworthiness': trust, 'correlation':corr}
-        print(f'PCA -> Trustworthiness: {trust:.3f}, Correlation: {corr:.2f}')
+        self.data = pd.concat([self.data, coords_df], axis=1)
+
+        metrics_results = metrics.evaluate_reduction(x, coords.values)
+        print(f'[{method.upper()}] Trustworthiness: {metrics_results['trustworthiness']:3f}')
+        print(f'[{method.upper()}] Correlation: {metrics_results['correlation']:3f}')
+
         
-        return coords, metrics
+        return coords
         
     def visualize(self, show: bool = True, save_prefix: str | None = None, title:str = 'Chemical Space', heatmap_title: str = 'Tanimoto Heatmap', interactive_mode: bool = False, port: int = 8050):
         coords_cols = [col for col in self.data.columns if col.startswith('PCA') or col.startswith('Dim')]

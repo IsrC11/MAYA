@@ -58,15 +58,15 @@ class MayaAnalyzer:
         original_space = pd.DataFrame(x, index=self.data.index)
         reduced_space = pd.DataFrame(coords, index=self.data.index)
 
-        matrics = evaluate_reduction(original_space, reduced_space)
-        trust = metrics['trustworthiness']
-        coor = metrics['correlation']
+        results_eval = evaluate_reduction(original_space, reduced_space)
+        trust = results_eval['trustworthiness']
+        coor = results_eval['correlation']
         
         print(f'Trustworthiness ({method}): {trust:.3f}')
         print(f'Correlation ({method}): {corr:3.f}')
 
         
-        return coords
+        return coords, results_eval, trust, coor
         
     def visualize(self, show: bool = True, save_prefix: str | None = None, title:str = 'Chemical Space', heatmap_title: str = 'Tanimoto Heatmap', interactive_mode: bool = False, port: int = 8050):
         coords_cols = [col for col in self.data.columns if col.startswith('PCA') or col.startswith('Dim')]

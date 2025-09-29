@@ -58,9 +58,9 @@ class MayaAnalyzer:
         original_space = pd.DataFrame(x, index=self.data.index)
         reduced= space = pd.DataFrame(coords, index=self.data.index)
 
-
-        trust = trustworthiness(original_space, reduced_space)
-        coor = calculate_similarity_correlation(original_space, reduced_space)
+        matrics = evaluate_reduction(original_space, reduced_space)
+        trust = metrics['trustworthiness']
+        coor = metrics['correlation']
         
         print(f'Trustworthiness ({method}): {trust:.3f}')
         print(f'Correlation ({method}): {corr:3.f}')

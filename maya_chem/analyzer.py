@@ -54,7 +54,7 @@ class MayaAnalyzer:
         self.data=pd.concat([self.data, coords], axis=1)
 
 
-        self.data = pd.concat([self.data, coords_df], axis=1)
+        self.data = pd.concat([self.data, coords], axis=1)
 
         metrics_results = metrics.evaluate_reduction(x, coords.values)
         print(f'[{method.upper()}] Trustworthiness: {metrics_results['trustworthiness']:3f}')

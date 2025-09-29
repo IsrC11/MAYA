@@ -38,6 +38,8 @@ class MayaAnalyzer:
         x = np.array([np.frombuffer(fp.ToBitString().encode('utf-8'), dtype='S1') for fp in self.fps])
         x = (x.view(np.uint8) - ord('0')).reshape(len(self.fps), -1)
         method_lower = method.lower()
+
+        
         if method_lower == 'pca':
             coords = reduction.apply_pca(x, n_components=n_components)
             prefix = 'PCA'
@@ -53,11 +55,9 @@ class MayaAnalyzer:
         coords = pd.DataFrame(coords, index=self.data.index, columns=[f'{prefix}{i+1}' for i in range(coords.shape[1])])
         self.data=pd.concat([self.data, coords], axis=1)
 
-
-        self.data = pd.concat([self.data, coords], axis=1)
-        original_space = pd.DataFrame(x, index=self.data.index)
-        reduced_space = pd.DataFrame(coords, index=self.data.index)
-
+        original_space = x
+        reduced_space = coords
+        
         results_eval = evaluate_reduction(original_space, reduced_space)
         trust = results_eval['trustworthiness']
         coor = results_eval['correlation']

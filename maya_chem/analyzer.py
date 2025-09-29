@@ -56,7 +56,7 @@ class MayaAnalyzer:
 
         self.data = pd.concat([self.data, coords], axis=1)
         original_space = pd.DataFrame(x, index=self.data.index)
-        reduced= space = pd.DataFrame(coords, index=self.data.index)
+        reduced_space = pd.DataFrame(coords, index=self.data.index)
 
         matrics = evaluate_reduction(original_space, reduced_space)
         trust = metrics['trustworthiness']

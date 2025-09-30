@@ -77,7 +77,7 @@ class MayaAnalyzer:
 
         return coords, results_eval, trust, coor, explained_variance
         
-    def visualize(self, show: bool = True, save_prefix: str | None = None, title:str = 'Chemical Space', heatmap_title: str = 'Tanimoto Heatmap', interactive_mode: bool = False, port: int = 8050):
+    def visualize(self, show: bool = True, save_prefix: str | None = None, title:str = 'Chemical Space', heatmap_title: str = 'Tanimoto Heatmap', interactive_mode: bool = False, port: int = 8060):
         coords_cols = [col for col in self.data.columns if col.startswith('PCA') or col.startswith('Dim')]
         import plotly.express as px
         from molplotly import add_molecules

@@ -107,7 +107,7 @@ class MayaAnalyzer:
             try:
                 fig= px.scatter(self.data, x=x_col, y=y_col, color=color_col, title=title, width=900, height=700, color_continuous_scale=palette)
 
-                if hasattr(self.explained_variance) and self.explained_variance is not None:
+                if hasattr(self, 'explained_variance') and self.explained_variance is not None:
                     x_label = f'PC1({self.explained_variance[0]*100:.2f}%)'
                     y_label = f'PC2({self.explained_variance[1]*100:.2f}%)'
                     fig.update_layout(xaxis_title = x_label, yaxis_title = y_label)

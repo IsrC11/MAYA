@@ -45,6 +45,7 @@ class MayaAnalyzer:
             pca = PCA(n_components=n_components)
             coords = pca.fit_transform(x)
             explained_variance = pca.explained_variance_ratio_
+            self.explained_variance = explained_variance
             prefix = 'PCA'
         elif method_lower == 'tsne':
             coords = reduction. apply_tsne(x, n_components=n_components) 
@@ -102,7 +103,7 @@ class MayaAnalyzer:
             try:
                 fig= px.scatter(self.data, x=x_col, y=y_col, color=color_col, title=title, width=900, height=700, color_continuous_scale=palette)
 
-                if explained_variance is not None:
+                if self.explained_variance is not None:
                     x_label = f'PC1({explained_variance[0]*100:.2f}%)'
                     y_label = f'PC2({explained_variance[1]*100:.2f}%)'
                     fig.update_layout(xaxis_title = x_label, yaxis_title = y_label)

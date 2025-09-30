@@ -38,10 +38,11 @@ class MayaAnalyzer:
         x = np.array([np.frombuffer(fp.ToBitString().encode('utf-8'), dtype='S1') for fp in self.fps])
         x = (x.view(np.uint8) - ord('0')).reshape(len(self.fps), -1)
         method_lower = method.lower()
-
+        explained_variance = None
         
         if method_lower == 'pca':
             coords = reduction.apply_pca(x, n_components=n_components)
+            explained_variance = pca.explained_variance_ratio_
             prefix = 'PCA'
         elif method_lower == 'tsne':
             coords = reduction. apply_tsne(x, n_components=n_components) 
@@ -65,8 +66,7 @@ class MayaAnalyzer:
         print(f'Trustworthiness ({method}): {trust:.3f}')
         print(f'Correlation ({method}): {coor:.3f}')
 
-        
-        return coords, results_eval, trust, coor
+        return coords, results_eval, trust, coor, explained_variance
         
     def visualize(self, show: bool = True, save_prefix: str | None = None, title:str = 'Chemical Space', heatmap_title: str = 'Tanimoto Heatmap', interactive_mode: bool = False, port: int = 8050):
         coords_cols = [col for col in self.data.columns if col.startswith('PCA') or col.startswith('Dim')]
@@ -99,6 +99,12 @@ class MayaAnalyzer:
  
             try:
                 fig= px.scatter(self.data, x=x_col, y=y_col, color=color_col, title=title, width=900, height=700, color_continuous_scale=palette)
+
+                if explained_variance is not None:
+                    x_label = f'PC1({explained_variance[0]*100:.2f}%)'
+                    y_label = f'PC2({explained_variance[1]*100:.2f}%)'
+                    fig.update_layout(xaxis_title = x_label, yaxis_title = y_label)
+            
                 fig = molplotly.add_molecules(fig=fig, df=self.data, smiles_col=self.config.data['smiles_col'], title_col=self.config.data['id_col'], color_col=color_col)
                 serve_kernel_port_as_iframe('localhost')
                 fig.run(port=port)

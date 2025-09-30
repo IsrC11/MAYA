@@ -41,7 +41,8 @@ class MayaAnalyzer:
         explained_variance = None
         
         if method_lower == 'pca':
-            coords = reduction.apply_pca(x, n_components=n_components)
+            pca = PCA(n_components=n_components)
+            coords = pca.fit_transform(x)
             explained_variance = pca.explained_variance_ratio_
             prefix = 'PCA'
         elif method_lower == 'tsne':

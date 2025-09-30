@@ -50,7 +50,6 @@ class MayaAnalyzer:
         else:
             if hasattr(self, 'explained_variance'):
                 del self.explained_variance
-            
             if method_lower == 'tsne':
                 coords = reduction. apply_tsne(x, n_components=n_components) 
                 prefix = 'Dim'

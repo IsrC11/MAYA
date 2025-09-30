@@ -39,6 +39,8 @@ class MayaAnalyzer:
         x = (x.view(np.uint8) - ord('0')).reshape(len(self.fps), -1)
         method_lower = method.lower()
         explained_variance = None
+        coords = None
+        prefix = ''
         
         if method_lower == 'pca':
             from sklearn.decomposition import PCA
@@ -47,17 +49,18 @@ class MayaAnalyzer:
             explained_variance = pca.explained_variance_ratio_
             self.explained_variance = explained_variance
             prefix = 'PCA'
-        else:
+        elif method_lower == 'tsne':
+            coords = reduction. apply_tsne(x, n_components=n_components) 
+            prefix = 'Dim'
             if hasattr(self, 'explained_variance'):
                 del self.explained_variance
-            if method_lower == 'tsne':
-                coords = reduction. apply_tsne(x, n_components=n_components) 
-                prefix = 'Dim'
-            if method_lower == 'umap':
-                coords = reduction.apply_umap(x, n_components=n_components)
-                prefix = 'Dim'
-            else:
-                raise ValueError(f'Unknown dimentionallity reduction method: {method}')
+        elif method_lower == 'umap':
+            coords = reduction.apply_umap(x, n_components=n_components)
+            prefix = 'Dim'
+            if hasattr(self, 'explained_variance'):
+                del self.explained_variance
+        else:
+            raise ValueError(f'Unknown dimentionallity reduction method: {method}')
 
         coords = pd.DataFrame(coords, index=self.data.index, columns=[f'{prefix}{i+1}' for i in range(coords.shape[1])])
         self.data=pd.concat([self.data, coords], axis=1)

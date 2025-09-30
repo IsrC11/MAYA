@@ -104,9 +104,12 @@ class MayaAnalyzer:
                 fig= px.scatter(self.data, x=x_col, y=y_col, color=color_col, title=title, width=900, height=700, color_continuous_scale=palette)
 
                 if self.explained_variance is not None:
-                    x_label = f'PC1({explained_variance[0]*100:.2f}%)'
-                    y_label = f'PC2({explained_variance[1]*100:.2f}%)'
+                    x_label = f'PC1({self.explained_variance[0]*100:.2f}%)'
+                    y_label = f'PC2({self.explained_variance[1]*100:.2f}%)'
                     fig.update_layout(xaxis_title = x_label, yaxis_title = y_label)
+                else:
+                    x_label = 'Dim1'
+                    y_label = 'Dim2'
             
                 fig = molplotly.add_molecules(fig=fig, df=self.data, smiles_col=self.config.data['smiles_col'], title_col=self.config.data['id_col'], color_col=color_col)
                 serve_kernel_port_as_iframe('localhost')

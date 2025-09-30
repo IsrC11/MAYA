@@ -41,6 +41,7 @@ class MayaAnalyzer:
         explained_variance = None
         
         if method_lower == 'pca':
+            from sklearn.decomposition import PCA
             pca = PCA(n_components=n_components)
             coords = pca.fit_transform(x)
             explained_variance = pca.explained_variance_ratio_

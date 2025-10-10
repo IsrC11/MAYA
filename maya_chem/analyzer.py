@@ -98,7 +98,7 @@ class MayaAnalyzer:
         color_col = color_by if color_by else self.config.viz.get('color_by', None)
         if color_col not in self.data.columns:
             print(f'Warning: "{color_col}" not exist in dataset')
-            color_col = None
+            #color_col = None
 
         if save_prefix:
             from . import visualization

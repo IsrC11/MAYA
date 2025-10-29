@@ -100,60 +100,15 @@ TPSA       |  Polar Surface Area
 
 ---
 
-## Main Funtions
+### Best Practices
 
-1. **`pretreatment(smi: str) -> str`**
-   - **Description**: Preprocesses a SMILES string, applying normalization and validation.
-   - **Parameters**:
-     - `smi` (str): SMILES to preprocess.
-   - **Returns**: Preprocessed SMILES or an error message if the SMILES is invalid.
-
-2. **`parallel_pretreatment(data_frame: pd.DataFrame, smiles_column_name: str, n_jobs: int) -> pd.DataFrame`**
-   - **Description**: Parallelizes the preprocessing of SMILES in a DataFrame.
-   - **Parameters**:
-     - `data_frame` (pd.DataFrame): DataFrame containing the SMILES.
-     - `smiles_column_name` (str): Name of the column containing the SMILES.
-     - `n_jobs` (int): Number of cores to use.
-   - **Returns**: DataFrame with a new column `Canonical_Smiles` containing the preprocessed SMILES.
-
-3. **`similarity_calc(smi1: str, smi2: str, method: str = 'tanimoto', fp_type: str = 'MACCS') -> float`**
-   - **Description**: Calculates the similarity between two compounds based on their SMILES.
-   - **Parameters**:
-     - `smi1` (str): SMILES of the first compound.
-     - `smi2` (str): SMILES of the second compound.
-     - `method` (str): Comparison method (default: `'tanimoto'`).
-     - `fp_type` (str): Type of fingerprint to use (`'MACCS'`, `'ECFP'`, or `'MAP4'`).
-   - **Returns**: Similarity coefficient between the compounds.
-
-4. **`calculate_all_similarities_blocks(fp_type: str = 'MACCS', method: str = 'tanimoto') -> pd.DataFrame`**
-   - **Description**: Calculates the similarity between all pairs of compounds in blocks.
-   - **Parameters**:
-     - `fp_type` (str): Type of fingerprint to use.
-     - `method` (str): Comparison method.
-   - **Returns**: DataFrame with the similarity matrix.
-
-5. **`evaluate_metric(data_frame: pd.DataFrame, evaluation_metric: str, metric_name: str) -> pd.DataFrame`**
-   - **Description**: Generates a custom metric based on columns in the DataFrame.
-   - **Parameters**:
-     - `data_frame` (pd.DataFrame): DataFrame containing the required columns.
-     - `evaluation_metric` (str): Mathematical expression to combine columns.
-     - `metric_name` (str): Name of the new column to store the metric.
-   - **Returns**: DataFrame with the new metric column.
-
-6. **`applying_pca(data, n_components=2)`**
-   - **Description**: Applies PCA to the data and returns the principal components.
-   - **Parameters**:
-     - `data`: Input data.
-     - `n_components`: Number of principal components to calculate.
-   - **Returns**: PCA results and explained variance.
-
-7. **`applying_tsne(data, perplexity: int, n_iterations: int)`**
-   - **Description**: Applies t-SNE to the data.
-   - **Parameters**:
-     - `data`: Input data.
-     - `perplexity`: Perplexity parameter for t-SNE.
-     - `n_iterations`: Number of iterations for t-SNE.
-   - **Returns**: t-SNE results.
+Topic   |    Reocommendation
+ :---:     |     :---:
+SMILES      |  Always canonicalize
+Size       |  >50k compounds
+Reproducibility        |  random_state=42
+Interpretation        |  PCA (global) + t-SNE/UMAP (local)
+TPSA       |  Polar Surface Area
 
 ---
 >[!IMPORTANT]
@@ -171,18 +126,6 @@ TPSA       |  Polar Surface Area
 <p align='justify'>
 
 Defines the radius of the circle centered on each atom within a molecule. Typically this radius corresponds to 2 or 3 bonds, allowing the mapping of the immediate chemical environment of each atom. This variable is essential for capturing local chemical interactions that contribute to molecular activity.
-
-#### **size_point_representation**
-<p align='justify'>
-The default point size is 12. However, it is possible to adjust the size to represent a specific characteristic of the database. By default, the size will represent the standard deviation of activity values, indicating the variability of activity values across the multiple targets in the databases. The user can modify the characteristic to be represented by defining the variable ˋsize_point_representationˋ. Possible representations include:
-
-1. normal_desviation: Default configuration
-2. size_point_HBA: Hydrogen Bond Acceptor
-3. size_point_LogP: Octano - Water Coefficient
-4. size_point_TPSA: Total Polar Surface Area
-5. size_point_MW: Molecular Weight
-6. size_point_HBD: Hydrogen Bond Donor
-7. size_point_RB: Rotable Bonds
 
 #### **signaturizer\_code**  
 A list containing the names of the different bioactive descriptors[^1] used. These descriptors can be expanded or reduced depending on the analysis requirements. The included descriptors are:
@@ -209,62 +152,7 @@ The perplexity value is closely related to the resulting visualizations. This pa
 ## Color Scale
 <p align='justify'>
 The visual representation of a property or activity is implemented to facilitate the identification of relevant patterns, differences, or trends. Additionally, weighting and penalizations considerations can be implemented to enhance the analysis copabilities based on user requeriments. This allows the generation of a ranking or evaluation matric based on the activities or properties available in the database.
-   
-The **evaluation_metric** and **metric_name** variables have been defined. By default, the color scale in the graphs represents the mean of the pIC50 values if each compound's activities, defined as:
-<p align='center'>
-mpIC50 = -log(IC50(A)) + -log(IC50(B)) + ... / n
-
-However, the user can modify this configuration changing the asignation of the variable **evaluation_metric** to visualizae the following properties:
-   
-1. normal_desviation: Standard deviation of each compounds's activities
-2. HBD: Hydrogen Bond Donors
-3. HBA: Hydrogen Bond Acceptors
-4. MW:Molecular Weight
-5. TPSA: Total Polar Surface Area
-6. cLogP: Calculated Octanol/Water Partition Coefficient
-7. RB: Rotable bonds
-8. mpIC50_value: Default configuration
-
-```markdown
-# Defaul configuration
-evaluation_metric = 'mpIC50_value', metric_name = 'mpIC50'
-```
-```markdown
-# Example
-evaluation_metric = 'MW', metric_name = 'Molecular Weight'
-```
-
-
->[!NOTE]
-> Both variables accept strign values.
-
-Defining a custom metric: Users can specify how to combine activities or properties. For example, for a series of three activities (Activity_1_Colum_Name, Activity_2_Colum_Name, Activity_3_Colum_Name), where one is undesired (Activity_3_Colum_Name), it is possible to penalize it, defining **evaluation_metric**. For exmaple:
-
-```markdown
-# To penalize an undesired activity
-evaluation_metric = '('Activity_1_Colum_Name') + ('Activity_2_Colum_Name') - ('Activity_1_Colum_Name')'
-```
-
-```markdown
-# To assign different weights to activities/properties
-evaluation_metric = '2 * ('Activity_1_Colum_Name') + ('Activity__Colum_Name') - ('Activity_3_Colum_Name')'
-```
-
-```markdown
-# To work with logaritmic values:
-evaluation_metric = '('Activity_1_Colum_Name' * 1000) + (('Activity_2_Colum_Name' * 1000)) - (('Activity_3_Colum_Name' * 1000))'
-```
-
->[!IMPORTANT]
-><p align='justify'>
-> It is necessary to  specify the column name present in the initial dataset. The implemented function relies on recognozing these names, so it is recommended to avoid using names that may conflict with Python or Numpay reserved functions or keywords (e.g. log, sum, mean). Additionally, columns names containing special characters (such as +, -, *) should be avoided.
->To ensure proper functionlaity, it is recommended to use only letters, numbers and underscores, avoiding spaces in column names.
-
-The name of the metric displayed in the graphs can be defined using the metric_name variable. For example:
-
-```markdown
-metric_name = 'Ranking Scale'
-```
+  
 
 ### Quick local use for non-experts
 

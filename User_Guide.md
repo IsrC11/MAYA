@@ -61,24 +61,42 @@ config.data['activities'] = ['pIC50_A', 'pIC50_B']
 
 - **MAP4** (str)=Variable to define the property to be vis
 
-- **point_shape** (str): Shape of the points in the plots. Default: ‘circle’
+```markdown
+# In descriptors.py compute_morgan_fingerprint(radius=3)
+```
 
-### Metric Configuration
+#### Dimensionality Reduction
 
-- **evaluation_metric** (str): Mathematical expression to combine columns and generate a custom metric. Default: 'mpIC50_value'
+Method   |    Key Parameters    |    Recommended Range   |    Effect
+ :---:      |     :---:      |      :---:    |      :---:
+PCA         |  n_compontes  |  2-3  |   Linear, Interpretable
+t-SNE       |  perplexity   |  5-50  |  Local structure
+UMAP        |  n_neighbors  |  5-200 |  Local + Global balance
 
-- **metric_name** (str): Name of the column that will store the calculated metric. Default: 'mpIC50'
+How many neighbors does each point consider?
 
+Value   |    Effect
+ :---:      |     :---:
+5-10         |  Small, tight clusters
+30       |  Balacned (default)
+50-100        |  Global trends
 
-### t-SNE Configuration
+##### Customize
+```markdown
+from sklearn.mainfold import TSNE
+tsne = TSNE(perplexity=50, n_iter=5000)
+```
 
-- **perplexity** (int): Perplexity parameter for t-SNE. Adjust based on dataset size. Default 33
+### Physicochemcial Properties
 
-- **n_iterations** (int): Number of iterations for t-SNE. Default: 1000
+Value   |    Meaning
+ :---:     |     :---:
+MolWt      |  Molecular Weight
+LogP       |  lipophilicity
+HBA        |  Hydrogen bond acceptors
+HBD        |  Hydrogen bond donors
+TPSA       |  Polar Surface Area
 
- ### Parallelization
-
- - **n_jobs** (int): Number of CPU cores to use for parallel calculation. Default: -1 (all available cores)
 
 ---
 

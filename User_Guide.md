@@ -1,54 +1,65 @@
-# **Basic Usage**
+# **User Guide**
 
 <p align='justify'>
-MAYA is a tool designed to automate the construction and visualization of a chemical multiverse from a set of compounds. It enables multiple similarity calculations, dimensionality reduction (PCA and t-SNE), and interactive visualizations based on chemical descriptors and biological activities.
+MAYA is a tool designed to automate the construction and visualization of a chemical multiverse from a set of compounds. It enables multiple similarity calculations, dimensionality reduction, quality metrics, and molecule-on-hover visualizations based on chemical descriptors and biological activities.
 
 *Key Features*
 
-1. **SMILES Preprocessing**: Normalization and validation of SMILES.
-2. **Similatity Calculation**: Use of MACCS, ECFP, and MAP4 to calculate similaties between compounds.
-3. **Dimensionality Reduction**: Aplication of PCA and t-SNE for 2D visualization.
-4. **Interactive Visualization**: Interactive plots with detailed information for each compound.
-5. **Descriptor Calculation**: Drug-likeness descriptors and chemical signatures (signaturizer).
+Feature     |    Descriptions
+ :---:      |     :---:
+SMILES Preprocessing  |  Normalization, validation, and canonicalization
+Fingerprints          |  MACCS Keys (166 bits), Morgan/ECFP (1024, 2048), MAP4
+Similarity            |  Parallel Tanimoto matrix (via Joblib)
+Dimensionality Reduction  |  PCA, t-SNE, UMAP
+Physicochemical Properties | MolWt, LogP, HBA, HBD, TPSA
+Quality Metrics       |  Trustworthiness, Distancce Correlation
+Vsualization          |  Static (PNG) + Interactive (Dash + Molplotly)
+CLI & API             |  Run from terminal or Python
 
 ---
 
-### Dataset Configuration  
+### Dataset Format  
 <p align='justify'>
  
 >[!NOTE]
->The dataset must be annotated with SMILES notation, a unique idenntifier (ID), and at least one activity or property. Supported formats include: CSV, XLSX, TSV, JSON, XML.
+>The dataset must be annotated with SMILES notation (required), a unique idenntifier ID (required), and at least one activity or property (optional). Supported formats include: CSV, XLSX, TSV.
 
 Comp_ID   |    Smiles    |    Activity_1
  :---:      |     :---:      |      :---:
 Comp_137  |  NC(=O)c1cccc(c1)c2cnc3[nH]cc(c4ccccc4)c3c2  |  0.001
 
 
-### Calculation settings
+### Analysis Configuration
 
-- **vPCA** (bool): Enable or disable PCA calculations. Default: True
+- **data_path** (str): Input file path
 
-- **t\_SNE** (bool): Enable or disable t-SNE calculation. Default: True
+- **output_dir** (str): Output folder. Default: ./results
 
-- **MACCS** (bool): Enable or disable similarity calculation with MACCS. Default: True
+- **fingerprint** (str/list): List of fingerprints for compute. Default: ['maccs']
 
-- **ECFP** (bool): Enable or disable similarity calculation with Extended Conectivity Fingerprint (ECFP). Default: True
+- **reduction_method** (str/list): Visualization technique to use. Default: ['pca']
 
-- **radius** (int): User-defined variable for ECFP radius 2 or 3. Default: 3
+- **color_by** (str): Column to color points. Default: 'LogP'
 
-- **druglikeness\_descriptors** (bool): Enables or disable chemical space visualization with drug-likeness descriptors: Default: True
+- **palette** (str): Plotly/Matplotlib palette. Default: 'RdBu_r'
 
-- **MAP4** (bool): Enables or disable similarity calculation using MAP4. Default: True
+  #### Customize columns
+```markdown
+config.data['id_col'] = 'Molecule_ID'
+config.data['smiles_col'] = 'Structure'
+config.data['activities'] = ['pIC50_A', 'pIC50_B']
+```
+ 
+ ## Key parameters
 
-- **signaturizer_code** (list): List of codes for calculating chemical signatures (signaturizer). Default: All variable codes.
 
- ### Visualzation Settings
+ #### Fingerprints
 
-- **palette** (str): Color palette for the plots. Default: 'RdBu\_r'.
+- **Morgan (ECFP)**: 1024/2048 bits (Recommended)
 
-- **size_point** (float): Size of the point in the plots. Default: 12.0
+- **MACCS** (float): 166 bits. Use for fast screening
 
-- **size_point_representation** (str)=Variable to define the property to be visualized through the size of the point. Default: 'normal_desviation'
+- **MAP4** (str)=Variable to define the property to be vis
 
 - **point_shape** (str): Shape of the points in the plots. Default: ‘circle’
 

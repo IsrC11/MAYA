@@ -39,7 +39,28 @@ MAYA's visualizations are designed to enhance intepretability, offering research
 #### Example of usage
 ```markdown
 # This is an example
-chemical_multiverse(dataset='/content/example.csv', smiles_column_name='SMILES', target_activities=['Target_1', 'Target_2', 'Target_3'], MACCS=Falce, ECFP=True, MD=Falce, vPCA=True, t-SNE=True )
+from maya_chem import MayaAnalyzer, MayaConfig
+import numpy as np
+
+# Crear configuración
+config = MayaConfig(data_path="TEST.xlsx")
+
+# Actualizar claves relevantes
+config.data.update({
+    "id_col": "molregno",
+    "smiles_col": "canonical_smiles",
+    "activities": ["standard_value"]
+})
+config.analysis["fingerprint"] = ["morgan", 'maccs']
+config.analysis["reduction_method"] = ['pca']
+config.viz["output_dir"] = "/content/MAYA/colab_results"
+
+# Correr pipeline
+analyzer = MayaAnalyzer(config)
+results = analyzer.run(color_by='standard_value')
+figs = analyzer.visualize(interactive_mode=True, color_by='standard_value')
+
+print("✅ Pipeline completed. Check '/content/MAYA/colab_results' for outputs.")
 
 ```
 

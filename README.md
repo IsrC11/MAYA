@@ -1,7 +1,7 @@
 # MAYA
 <div align='center'>
   
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/17SSd2BuBfMffRJKJwfYrDPwK3khvvAIj?usp=sharing)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1uJM94avHam-LJJZXv0cmLgptNgEk6KP4#scrollTo=h-zSsS54O_wa&uniqifier=1)
 
 
 <p align='justify'>

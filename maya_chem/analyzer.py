@@ -106,7 +106,6 @@ class MayaAnalyzer:
 
         if interactive_mode:
             import molplotly
-            from jupyter_dash import JupyterDash
             from plotly import graph_objects as go
  
             try:
@@ -121,8 +120,10 @@ class MayaAnalyzer:
                     y_label = 'Dim2'
             
                 fig = molplotly.add_molecules(fig=fig, df=self.data, smiles_col=self.config.data['smiles_col'], title_col=self.config.data['id_col'], color_col=color_col, caption_cols = self.config.data['activities'])
-                serve_kernel_port_as_iframe('localhost')
-                fig.run(port=port)
+                app.layout = html.Div([html.H1('MAYA_chem Visualization'), dcc.Graph('graph', figure=fig)])
+                
+                #serve_kernel_port_as_iframe('localhost')
+                #fig.run(port=port)
                 return fig
                 
             except Exception as e:

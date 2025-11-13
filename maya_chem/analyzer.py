@@ -119,8 +119,11 @@ class MayaAnalyzer:
                     x_label = 'Dim1'
                     y_label = 'Dim2'
             
+                
                 fig = molplotly.add_molecules(fig=fig, df=self.data, smiles_col=self.config.data['smiles_col'], title_col=self.config.data['id_col'], color_col=color_col, caption_cols = self.config.data['activities'])
-            
+
+                fig.update_layout(plot_bgcolor='white', paper_bgcolor='white')
+                
                 serve_kernel_port_as_iframe('localhost')
                 fig.run(port=port)
                 return fig

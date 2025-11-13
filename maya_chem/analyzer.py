@@ -120,14 +120,9 @@ class MayaAnalyzer:
                     y_label = 'Dim2'
             
                 fig = molplotly.add_molecules(fig=fig, df=self.data, smiles_col=self.config.data['smiles_col'], title_col=self.config.data['id_col'], color_col=color_col, caption_cols = self.config.data['activities'])
-
-                fig.update_layout()
-                
-                #app = Dash(__name__)
-                #app.layout = html.Div([html.H1('MAYA_chem Visualization'), dcc.Graph('graph', figure=fig)])
-                
-                #serve_kernel_port_as_iframe('localhost')
-                #fig.run(port=port)
+            
+                serve_kernel_port_as_iframe('localhost')
+                fig.run(port=port)
                 return fig
                 
             except Exception as e:

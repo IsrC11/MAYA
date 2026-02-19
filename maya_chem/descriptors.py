@@ -3,6 +3,7 @@ from rdkit import Chem
 from rdkit.Chem import Descriptors, AllChem, MACCSkeys
 from rdkit.DataStructs.cDataStructs import ExplicitBitVect
 from skfp.fingerprints import MAPFingerprint
+import numpy as np
 
 def compute_morgan_fingerprint(smiles: str, radius: int = 2, nBits: int = 2048):
     """Compute Morgan fingerprint."""

@@ -3,7 +3,7 @@ import pandas as pd
 import os
 import numpy as np
 from rdkit import DataStructs
-from .curation import MayaCuration
+from .curation import MayaCuration, clean_dataset
 from .config import MayaConfig
 from .utils import load_data
 from . import utils, descriptors, similarity, reduction, visualization, interactive, metrics
@@ -16,13 +16,11 @@ class MayaAnalyzer:
         self.data: pd.DataFrame | None = None
         self.fps = None
         self.sim_matrix: np.ndarray | None = None
-
-    def __init__ (self,config: MayaConfig):
-        self.config = config
-        self.curation = Mayacuration(config)
+        self.cuation = MayaCuration(config)
 
     def load_data(self):
         self.data = utils.load_data(self.config.data_path, id_col=self.config.data['id_col'], smiles_col=self.config.data['smiles_col'])
+        self.data = clean_dataset(self.data, smiles_col=self.config.data['smiles_col'], curation_config=self.config.curation)
         return self.data
 
     def compute_descriptors(self, fp_type: str):

@@ -3,6 +3,7 @@ import pandas as pd
 import os
 import numpy as np
 from rdkit import DataStructs
+from .curation import MayaCuration
 from .config import MayaConfig
 from .utils import load_data
 from . import utils, descriptors, similarity, reduction, visualization, interactive, metrics

@@ -29,12 +29,12 @@ def numpy_to_bitvect(arr:np.ndarray) -> ExplicitBitVect:
     return bv
 
 def compute_map4_fingerprint(smiles: str):
-
+    """compute MAP4 fingerprints"""
+    
     if not smiles:
         return None
 
     try:
-    """compute MAP4 fingerprints"""
        arr = map_4(smiles)
        return numpy_to_bitvect(arr)
     except Exception:

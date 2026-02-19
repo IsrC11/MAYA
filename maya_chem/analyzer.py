@@ -16,7 +16,7 @@ class MayaAnalyzer:
         self.data: pd.DataFrame | None = None
         self.fps = None
         self.sim_matrix: np.ndarray | None = None
-        self.cuation = MayaCuration(config)
+        self.cuation = MayaCuration(config.curation)
 
     def load_data(self):
         self.data = utils.load_data(self.config.data_path, id_col=self.config.data['id_col'], smiles_col=self.config.data['smiles_col'])

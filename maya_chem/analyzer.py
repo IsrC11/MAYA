@@ -29,8 +29,13 @@ class MayaAnalyzer:
         props_series = self.data[smiles_col].apply(descriptors.compute_physicochemical_properties)
         props_df = pd.DataFrame(list(props_series))
         self.data = pd.concat([self.data, props_df], axis=1)
+
+        if fp_type.lower() == 'map4':
+            smiles_list = selff.data[smiles_col].tolist()
+            self.fps = descriptors.compute_map4(smiles_list)
+        else:
+            self.fps[descriptors.compute_fingerprints(smi, method=fp_type) for smi in sel.data[smiles_col]]
         
-        self.fps = [descriptors.compute_fingerprint(smi, method=fp_type) for smi in self.data[smiles_col]]
 
     def compute_similarity(self, n_jobs: int = -1):
         self.sim_matrix = similarity.compute_similarity_matrix(self.fps, n_jobs)

@@ -32,7 +32,7 @@ class MayaAnalyzer:
 
         if fp_type.lower() == 'map4':
             smiles_list = self.data[smiles_col].tolist()
-            self.fps = descriptors.compute_map4(smiles_list)
+            self.fps = descriptors.compute_map4_fingerprint(smiles_list)
         else:
             self.fps=[descriptors.compute_fingerprint(smi, method=fp_type) for smi in self.data[smiles_col]]
         

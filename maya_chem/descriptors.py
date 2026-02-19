@@ -37,7 +37,7 @@ def compute_map4_fingerprint(smiles_list):
        arr = map_4.transform(smiles_list)
     except Exception as e:
         print('MAP4 batch transform failed:',e)
-       return []
+        return []
     fps_bitvect = []
 
     for arr in arrs :

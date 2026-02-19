@@ -28,18 +28,24 @@ def numpy_to_bitvect(arr:np.ndarray) -> ExplicitBitVect:
             bv.SetBit(i)
     return bv
 
-def compute_map4_fingerprint(smiles: str):
+def compute_map4_fingerprint(smiles_list):
     """compute MAP4 fingerprints"""
-    
-    if not smiles:
-        return None
+    smiles_list = [smi for smi in smiles_list if isinstance(smi, str) and smi.strip()!=""]
 
     try:
        map_4 = MAPFingerprint()
-       arr = map_4.transform([smiles])[0]
-       return numpy_to_bitvect(arr)
-    except Exception:
-       return None
+       arr = map_4.transform(smiles_list)
+    except Exception as e:
+        print('MAP4 batch transform failed:',e)
+       return []
+    fps_bitvect = []
+
+    for arr in arrs :
+        if arr is None or len(arr) == 0:
+            fps_bitvect.append(None)
+        else:
+            fps_bitvect.append(numpy_to_bitvect(arr))
+    return fps_bitbect
 
 def compute_physicochemical_properties(smiles: str, selected_props=None):
     """Compute basic molecular descriptors."""

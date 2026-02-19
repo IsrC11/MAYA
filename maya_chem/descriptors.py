@@ -1,7 +1,7 @@
 # maya/descriptors.py
 from rdkit import Chem
 from rdkit.Chem import Descriptors, AllChem, MACCSkeys
-from rdkit.DataStructs import ExplicitBitVect
+from rdkit.DataStructs.cDataStructs import ExplicitBitVect
 from skfp.fingerprints import MAPFingerprint
 
 def compute_morgan_fingerprint(smiles: str, radius: int = 2, nBits: int = 2048):
@@ -19,14 +19,25 @@ def compute_maccs_fingerprint(smiles: str):
         return None
     return MACCSkeys.GenMACCSKeys(mol)
 
+map_4 = MAPFingerprint()
+
+def numpy_to_bitvect(arr:np.ndarray) -> ExplicitBitVect:
+    bv = ExplicitbitVecct(len(arr))
+    for i, bit in enumerate(arr):
+        if bit:
+            bv.SetBit(i)
+    return bv
+
 def compute_map4_fingerprint(smiles: str):
-    """compute MAP4 fingerprints"""
-    mol = Chem.MolFromSmiles(smiles)
-    if  mol is None:
+
+    if not smiles:
         return None
-    map_4 = MAPFingerprint()
-    arr = map_4.transform(mol)
-    return numpy_to_bitvect(arr)
+    try:
+    """compute MAP4 fingerprints"""
+        arr = map_4(smiles)
+        return numpy_to_bitvect(arr)
+    except Exception:
+        return None
 
 def compute_physicochemical_properties(smiles: str, selected_props=None):
     """Compute basic molecular descriptors."""

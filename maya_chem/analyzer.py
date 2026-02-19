@@ -34,7 +34,7 @@ class MayaAnalyzer:
             smiles_list = selff.data[smiles_col].tolist()
             self.fps = descriptors.compute_map4(smiles_list)
         else:
-            self.fps[descriptors.compute_fingerprints(smi, method=fp_type) for smi in self.data[smiles_col]]
+            self.fps[descriptors.compute_fingerprint(smi, method=fp_type) for smi in self.data[smiles_col]]
         
 
     def compute_similarity(self, n_jobs: int = -1):

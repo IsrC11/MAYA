@@ -31,7 +31,7 @@ class MayaAnalyzer:
         self.data = pd.concat([self.data, props_df], axis=1)
 
         if fp_type.lower() == 'map4':
-            smiles_list = selff.data[smiles_col].tolist()
+            smiles_list = self.data[smiles_col].tolist()
             self.fps = descriptors.compute_map4(smiles_list)
         else:
             self.fps=[descriptors.compute_fingerprint(smi, method=fp_type) for smi in self.data[smiles_col]]

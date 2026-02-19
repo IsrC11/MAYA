@@ -12,5 +12,5 @@ from .analyzer import MayaAnalyzer
 from .config import MayaConfig
 from .utils import load_data, save_dataframe, canonicalize_smiles
 
-__all__ = ["MayaAnalyzer", "MayaConfig", "load_data", "save_dataframe", "canonicalize_smiles"]
+__all__ = ["MayaAnalyzer", "MayaConfig", "load_data", "save_dataframe", "canonicalize_smiles", "MayaCuration"]
 __version__ = "0.1.0"

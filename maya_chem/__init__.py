@@ -11,6 +11,7 @@ Original file is located at
 from .analyzer import MayaAnalyzer
 from .config import MayaConfig
 from .utils import load_data, save_dataframe, canonicalize_smiles
+from .curation import MayaCuration, clean_dataset
 
-__all__ = ["MayaAnalyzer", "MayaConfig", "load_data", "save_dataframe", "canonicalize_smiles", "MayaCuration"]
+__all__ = ["MayaAnalyzer", "MayaConfig", "load_data", "save_dataframe", "canonicalize_smiles", "MayaCuration", "clean_dataset"]
 __version__ = "0.1.0"

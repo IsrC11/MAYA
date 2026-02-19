@@ -36,7 +36,7 @@ def compute_map4_fingerprint(smiles: str):
         return None
 
     try:
-       arr = map_4(smiles)
+       arr = map_4.transform([smiles])[0]
        return numpy_to_bitvect(arr)
     except Exception:
        return None

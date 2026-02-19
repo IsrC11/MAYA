@@ -1,7 +1,10 @@
 # maya/curation.py
 
 from rdkit import Chem
-from molvs import Standardizer, LargestFragmentChooser, Uncharger, TautomerCanonicalizer
+from molvs.standardize import Standardizer
+from molvs.charge import Uncharger
+from molvs.fragment import LargestFragmentChooser
+from molvs.tautomer import TautomerCanonicalizer
 
 class MayaCuration:
     """

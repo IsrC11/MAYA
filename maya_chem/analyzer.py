@@ -17,6 +17,10 @@ class MayaAnalyzer:
         self.fps = None
         self.sim_matrix: np.ndarray | None = None
 
+    def __init__ (self,config: MayaConfig):
+        self.config = config
+        self.curation = Mayacuration(config)
+
     def load_data(self):
         self.data = utils.load_data(self.config.data_path, id_col=self.config.data['id_col'], smiles_col=self.config.data['smiles_col'])
         return self.data

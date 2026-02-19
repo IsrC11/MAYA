@@ -32,12 +32,13 @@ def compute_map4_fingerprint(smiles: str):
 
     if not smiles:
         return None
+
     try:
     """compute MAP4 fingerprints"""
-        arr = map_4(smiles)
-        return numpy_to_bitvect(arr)
+       arr = map_4(smiles)
+       return numpy_to_bitvect(arr)
     except Exception:
-        return None
+       return None
 
 def compute_physicochemical_properties(smiles: str, selected_props=None):
     """Compute basic molecular descriptors."""

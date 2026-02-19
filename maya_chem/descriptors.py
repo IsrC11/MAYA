@@ -20,10 +20,9 @@ def compute_maccs_fingerprint(smiles: str):
         return None
     return MACCSkeys.GenMACCSKeys(mol)
 
-map_4 = MAPFingerprint()
 
 def numpy_to_bitvect(arr:np.ndarray) -> ExplicitBitVect:
-    bv = ExplicitbitVecct(len(arr))
+    bv = ExplicitBitVecct(len(arr))
     for i, bit in enumerate(arr):
         if bit:
             bv.SetBit(i)
@@ -36,6 +35,7 @@ def compute_map4_fingerprint(smiles: str):
         return None
 
     try:
+       map_4 = MAPFingerprint()
        arr = map_4.transform([smiles])[0]
        return numpy_to_bitvect(arr)
     except Exception:

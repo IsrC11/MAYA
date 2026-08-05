@@ -16,9 +16,20 @@ from .config import MayaConfig
 @click.argument("data_path")
 @click.option("--output_dir", default="results", help="Directory to save results")
 @click.option("--n_jobs", default=-1, help="Number of parallel jobs")
-def main(data_path, output_dir, n_jobs):
+@click.option("--id_col", default="ID", help="Nombre de la columna de identificador")
+@click.option("--smiles_col", default="SMILES", help="Nombre de la columna de SMILES")
+@click.option("--fingerprint", default="morgan", help="Tipo de fingerprint: morgan, maccs, map4")
+@click.option("--reduction_method", default="pca", help="Método de reducción: pca, tsne, umap")
+
+def main(data_path, output_dir, n_jobs, id_col, smiles_col, fingerprint, reduction_method):
     """Run MAYA analysis from command line."""
-    config = MayaConfig(data_path=data_path, output_dir=output_dir, n_jobs=n_jobs)
+    config = MayaConfig(data_path=data_path,
+        output_dir=output_dir,
+        n_jobs=n_jobs,
+        id_col=id_col,
+        smiles_col=smiles_col,
+        fingerprint=fingerprint,
+        reduction_method=reduction_method)
     analyzer = MayaAnalyzer(config)
     analyzer.run()
 

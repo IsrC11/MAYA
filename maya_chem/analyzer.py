@@ -16,7 +16,6 @@ class MayaAnalyzer:
         self.data: pd.DataFrame | None = None
         self.fps = None
         self.sim_matrix: np.ndarray | None = None
-        self.cuation = MayaCuration(config.curation)
 
     def load_data(self):
         self.data = utils.load_data(self.config.data_path, id_col=self.config.data['id_col'], smiles_col=self.config.data['smiles_col'])
@@ -89,7 +88,12 @@ class MayaAnalyzer:
         coords_cols = [col for col in self.data.columns if col.startswith('PCA') or col.startswith('Dim')]
         import plotly.express as px
         from molplotly import add_molecules
-        from google.colab.output import serve_kernel_port_as_iframe
+        try:
+            from google.colab.output import serve_kernel_port_as_iframe
+            _in_colab = True
+        except ImportError:
+            serve_kernel_port_as_iframe = None
+            _in_colab = False
         from .visualization import plot_similarity_heatmap
         from dash import Dash, dcc, html, Input, Output
         
@@ -131,9 +135,10 @@ class MayaAnalyzer:
                 fig.update_layout(plot_bgcolor='white', paper_bgcolor='white', xaxis=dict(showgrid=False, zeroline=False, mirror=True), yaxis=dict(showgrid=False, zeroline=False, mirror=True))
                 fig = molplotly.add_molecules(fig=fig, df=self.data, smiles_col=self.config.data['smiles_col'], title_col=self.config.data['id_col'], color_col=color_col, caption_cols = self.config.data['activities'])
 
-                
-                serve_kernel_port_as_iframe('localhost')
+                if _in_colab:
+                    serve_kernel_port_as_iframe('localhost')
                 fig.run(port=port)
+                
                 return fig
                 
             except Exception as e:
@@ -174,6 +179,7 @@ class MayaAnalyzer:
                 heatmap_title = f'Tanimoto Heatmap - {fp.upper()}'
                 scatter_title = f'{fp.upper()} + {red.upper()}'
                 figs = self.visualize(save_prefix=save_prefix, show=False, title=scatter_title, heatmap_title=heatmap_title, interactive_mode=True, port=port, color_by=color_by)
+                coords, results_eval, trust, corr, explained_variance = reduced
                 results.append((fp, red, figs, metrics))
                 port+=3
         

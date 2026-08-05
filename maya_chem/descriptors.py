@@ -22,7 +22,7 @@ def compute_maccs_fingerprint(smiles: str):
 
 
 def numpy_to_bitvect(arr:np.ndarray) -> ExplicitBitVect:
-    bv = ExplicitBitVecct(len(arr))
+    bv = ExplicitBitVect(len(arr))
     for i, bit in enumerate(arr):
         if bit:
             bv.SetBit(i)
@@ -34,7 +34,7 @@ def compute_map4_fingerprint(smiles_list):
 
     try:
        map_4 = MAPFingerprint()
-       arr = map_4.transform(smiles_list)
+       arrs = map_4.transform(smiles_list)
     except Exception as e:
         print('MAP4 batch transform failed:',e)
         return []
@@ -45,7 +45,7 @@ def compute_map4_fingerprint(smiles_list):
             fps_bitvect.append(None)
         else:
             fps_bitvect.append(numpy_to_bitvect(arr))
-    return fps_bitbect
+    return fps_bitvect
 
 def compute_physicochemical_properties(smiles: str, selected_props=None):
     """Compute basic molecular descriptors."""

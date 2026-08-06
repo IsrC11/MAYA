@@ -18,7 +18,7 @@ def ensure_output_dir(output_dir: str) -> None:
     """Ensure that the output directory exists."""
     os.makedirs(output_dir, exist_ok=True)
 
-def load_data(file_path: str, id_col: str = "ID", smiles_col: str = "SMILES") -> pd.DataFrame:
+def load_data(file_path: str, id_col: str = "ID", smiles_col: str = "SMILES", canonicalize: bool = True) -> pd.DataFrame:
     """Load dataset from CSV/TSV and canonicalize SMILES."""
     ext = os.path.splitext(file_path)[1].lower()
     if ext == ".csv":

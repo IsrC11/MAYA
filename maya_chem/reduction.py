@@ -15,19 +15,9 @@ def apply_pca(fps, n_components: int = 2):
     """
     pca = PCA(n_components=n_components)
     coords = pca.fit_transform(fps)
-    return coords, pca.explained_variance_ratio_
+    return coords, pca.explained_variance_ratio_, pca.components_
 
 
-# CAMBIO: función nueva. Es el análogo correcto de PCA para "espacio estructural"
-# (fingerprints + Tanimoto). PCA clásico necesita features continuas en un
-# espacio aproximadamente euclidiano -- por eso SÍ es apropiado para descriptores
-# fisicoquímicos escalados, pero NO para bits binarios, donde la distancia
-# relevante es 1 - Tanimoto, no la euclidiana entre 0s y 1s.
-# PCoA (Principal Coordinate Analysis / Classical Multidimensional Scaling) es
-# el método estándar en quimioinformática para proyectar una matriz de
-# distancias/similitudes arbitraria (aquí: 1 - Tanimoto) a un espacio de baja
-# dimensión, preservando la mayor varianza posible -- exactamente lo que PCA
-# hace, pero partiendo de una matriz de distancias en vez de features crudas.
 def apply_structure_pcoa(sim_matrix: np.ndarray, n_components: int = 2):
     """Principal Coordinate Analysis (classical MDS) sobre una matriz de
     similitud de Tanimoto ya calculada.
@@ -41,7 +31,7 @@ def apply_structure_pcoa(sim_matrix: np.ndarray, n_components: int = 2):
     dist = 1.0 - sim_matrix
     n = dist.shape[0]
 
-    # Doble centrado de la matriz de distancias al cuadrado (Torgerson/Gower)
+    
     dist_sq = dist ** 2
     J = np.eye(n) - np.ones((n, n)) / n
     B = -0.5 * J @ dist_sq @ J
@@ -99,4 +89,3 @@ def scale_descriptors(props_df) -> np.ndarray:
     # químicamente -- es el error estadístico clásico de "features sin escalar".
     """
     return StandardScaler().fit_transform(props_df)
-

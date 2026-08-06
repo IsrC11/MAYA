@@ -17,8 +17,17 @@ class MayaAnalyzer:
         self.data: pd.DataFrame | None = None
         self.fps = None
         self.sim_matrix: np.ndarray | None = None
-        
+        # CAMBIO: se elimina 'self.cuation = MayaCuration(config.curation)'.
+        # Tenía un typo (cuation) y además nunca se usaba: load_data() crea su
+        # propio MayaCuration internamente vía clean_dataset(). Era código muerto
+        # que además instanciaba objetos de RDKit/MolVS innecesariamente en cada
+        # MayaAnalyzer(), sin ningún beneficio.
+
     def load_data(self):
+        # CAMBIO: canonicalize=False -- clean_dataset() (llamado justo abajo)
+        # recalcula 'Canonical_Smiles' de cero con el pipeline de curación
+        # completo, así que la canonicalización simple que hacía load_data()
+        # por defecto era trabajo desperdiciado (se sobreescribía sin usarse).
         self.data = utils.load_data(self.config.data_path, id_col=self.config.data['id_col'], smiles_col=self.config.data['smiles_col'], canonicalize=False)
         self.data = clean_dataset(self.data, smiles_col=self.config.data['smiles_col'], curation_config=self.config.curation)
         return self.data
@@ -40,55 +49,172 @@ class MayaAnalyzer:
         self.sim_matrix = similarity.compute_similarity_matrix(self.fps, n_jobs)
         return self.sim_matrix
 
-    def reduce_dimensions(self, method: str = 'pca', n_components: int = 2):
-
-        x = np.array([np.frombuffer(fp.ToBitString().encode('utf-8'), dtype='S1') for fp in self.fps])
-        x = (x.view(np.uint8) - ord('0')).reshape(len(self.fps), -1)
+    def reduce_dimensions(self, method: str = 'pca', n_components: int = 2, space: str = 'structure'):
+        """
+        Args:
+            space: 'structure' (default) reduce el espacio de fingerprints
+                usando la métrica de Tanimoto/Jaccard, correcta para bits
+                binarios. 'properties' reduce el espacio de descriptores
+                fisicoquímicos (MolWt, LogP, HBA, HBD, TPSA...) escalados con
+                z-score, correcto para PCA/t-SNE/UMAP euclidianos.
+                # CAMBIO: antes solo existía un camino -- PCA/t-SNE/UMAP con
+                # distancia euclidiana SIEMPRE sobre el array binario del
+                # fingerprint. Esto mezclaba dos preguntas distintas
+                # ("¿qué tan diversa es la librería estructuralmente?" vs.
+                # "¿cómo se distribuyen las propiedades tipo Lipinski?") en un
+                # solo método, y encima con una métrica (euclidiana) que no es
+                # la apropiada para bits binarios.
+        """
         method_lower = method.lower()
         explained_variance = None
         coords = None
         prefix = ''
 
-        if method_lower == 'pca':
-            from sklearn.decomposition import PCA
-            pca = PCA(n_components=n_components)
-            coords = pca.fit_transform(x)
-            explained_variance = pca.explained_variance_ratio_
-            self.explained_variance = explained_variance
-            prefix = 'PCA'
-        elif method_lower == 'tsne':
-            coords = reduction.apply_tsne(x, n_components=n_components)
-            prefix = 'Dim'
-            if hasattr(self, 'explained_variance'):
-                del self.explained_variance
-        elif method_lower == 'umap':
-            coords = reduction.apply_umap(x, n_components=n_components)
-            prefix = 'Dim'
-            if hasattr(self, 'explained_variance'):
-                del self.explained_variance
+        if space == 'structure':
+            # Bit-array del fingerprint (igual que antes), pero ahora la
+            # métrica usada en cada método SÍ es Jaccard/Tanimoto, no euclidiana.
+            x = np.array([np.frombuffer(fp.ToBitString().encode('utf-8'), dtype='S1') for fp in self.fps])
+            x = (x.view(np.uint8) - ord('0')).reshape(len(self.fps), -1)
+            eval_space = x
+            eval_metric = 'jaccard'
+
+            if method_lower == 'pca':
+                # CAMBIO: antes se corría sklearn.decomposition.PCA directo
+                # sobre los bits (distancia euclidiana implícita). Ahora se usa
+                # PCoA (Principal Coordinate Analysis) sobre 1 - Tanimoto, el
+                # análogo correcto de PCA para datos con distancia no-euclidiana.
+                if self.sim_matrix is None:
+                    self.compute_similarity()
+                coords, explained_variance = reduction.apply_structure_pcoa(self.sim_matrix, n_components=n_components)
+                self.explained_variance = explained_variance
+                prefix = 'PCoA'
+            elif method_lower == 'tsne':
+                coords = reduction.apply_tsne(x, n_components=n_components, metric='jaccard')
+                prefix = 'Dim'
+                if hasattr(self, 'explained_variance'):
+                    del self.explained_variance
+            elif method_lower == 'umap':
+                coords = reduction.apply_umap(x, n_components=n_components, metric='jaccard')
+                prefix = 'Dim'
+                if hasattr(self, 'explained_variance'):
+                    del self.explained_variance
+            else:
+                raise ValueError(f'Unknown dimentionallity reduction method: {method}')
+
+        elif space == 'properties':
+            # CAMBIO: camino nuevo. Usa los descriptores fisicoquímicos ya
+            # calculados en compute_descriptors() (MolWt, LogP, HBA, HBD, TPSA),
+            # escalados con z-score antes de reducir -- aquí sí euclidiana es
+            # la métrica correcta porque los descriptores son continuos.
+            prop_cols = [c for c in self.config.analysis['properties'] if c in self.data.columns]
+            if len(prop_cols) < 2:
+                raise ValueError(
+                    f"Se necesitan al menos 2 descriptores calculados para space='properties'. "
+                    f"Encontrados: {prop_cols}. ¿Corriste compute_descriptors() antes?"
+                )
+            x_scaled = reduction.scale_descriptors(self.data[prop_cols])
+            eval_space = x_scaled
+            eval_metric = 'euclidean'
+
+            if method_lower == 'pca':
+                coords, explained_variance, components = reduction.apply_pca(x_scaled, n_components=n_components)
+                self.explained_variance = explained_variance
+                # CAMBIO: se guardan los loadings y los nombres de las columnas
+                # de descriptores usadas, para poder construir un biplot después
+                # (visualization.plot_pca_biplot). Solo tiene sentido aquí
+                # (space='properties'), no en 'structure' (PCoA no da loadings).
+                self.pca_loadings = components
+                self.pca_feature_names = prop_cols
+                prefix = 'PCA'
+            elif method_lower == 'tsne':
+                coords = reduction.apply_tsne(x_scaled, n_components=n_components, metric='euclidean')
+                prefix = 'Dim'
+                if hasattr(self, 'explained_variance'):
+                    del self.explained_variance
+            elif method_lower == 'umap':
+                coords = reduction.apply_umap(x_scaled, n_components=n_components, metric='euclidean')
+                prefix = 'Dim'
+                if hasattr(self, 'explained_variance'):
+                    del self.explained_variance
+            else:
+                raise ValueError(f'Unknown dimentionallity reduction method: {method}')
         else:
-            raise ValueError(f'Unknown dimentionallity reduction method: {method}')
+            raise ValueError(f"Unknown space: '{space}'. Usa 'structure' o 'properties'.")
 
         coords = pd.DataFrame(coords, index=self.data.index, columns=[f'{prefix}{i+1}' for i in range(coords.shape[1])])
         self.data = pd.concat([self.data, coords], axis=1)
 
-        original_space = x
-        reduced_space = coords
-
-        results_eval = evaluate_reduction(original_space, reduced_space)
+        # CAMBIO: evaluate_reduction ahora recibe la métrica correcta según el
+        # espacio ('jaccard' para estructura, 'euclidean' para propiedades) en
+        # vez de asumir siempre 'euclidean' sin importar el tipo de datos.
+        results_eval = evaluate_reduction(eval_space, coords, metric=eval_metric)
         trust = results_eval['trustworthiness']
         coor = results_eval['correlation']
 
-        print(f'Trustworthiness ({method}): {trust:.3f}')
-        print(f'Correlation ({method}): {coor:.3f}')
+        print(f'Trustworthiness ({method}, space={space}): {trust:.3f}')
+        print(f'Correlation ({method}, space={space}): {coor:.3f}')
 
         return coords, results_eval, trust, coor, explained_variance
 
+    # CAMBIO: método nuevo -- clustering de compuestos. Deliberadamente separado
+    # de reduce_dimensions(): el clustering corre sobre el MISMO espacio con el
+    # que se calculó similitud (estructura o propiedades), NUNCA sobre las
+    # coordenadas 2D de PCA/PCoA/t-SNE/UMAP, porque esas coordenadas distorsionan
+    # distancias (t-SNE/UMAP en particular preservan vecindades locales, no la
+    # geometría global) y clusterizar ahí puede crear o destruir separaciones
+    # que no reflejan el espacio original.
+    def cluster_compounds(self, space: str = 'structure', n_clusters: int = 5):
+        """
+        Args:
+            space: 'structure' usa AgglomerativeClustering con la matriz de
+                distancias 1-Tanimoto precomputada (self.sim_matrix) -- NO se usa
+                K-means aquí porque K-means calcula centroides como el promedio
+                euclidiano de los puntos, y el "promedio" de fingerprints
+                binarios no tiene significado químico; la métrica relevante es
+                Tanimoto, no euclidiana.
+                'properties' usa K-means sobre los descriptores fisicoquímicos
+                ya escalados (z-score) -- aquí sí es válido porque los
+                descriptores son continuos y euclidianos.
+
+        Guarda las etiquetas en self.data['cluster'] y las retorna.
+        """
+        from sklearn.cluster import AgglomerativeClustering, KMeans
+
+        if space == 'structure':
+            if self.sim_matrix is None:
+                self.compute_similarity()
+            dist_matrix = 1.0 - self.sim_matrix
+            model = AgglomerativeClustering(n_clusters=n_clusters, metric='precomputed', linkage='average')
+            labels = model.fit_predict(dist_matrix)
+        elif space == 'properties':
+            prop_cols = [c for c in self.config.analysis['properties'] if c in self.data.columns]
+            if len(prop_cols) < 2:
+                raise ValueError(
+                    f"Se necesitan al menos 2 descriptores calculados para space='properties'. "
+                    f"Encontrados: {prop_cols}. ¿Corriste compute_descriptors() antes?"
+                )
+            x_scaled = reduction.scale_descriptors(self.data[prop_cols])
+            model = KMeans(n_clusters=n_clusters, random_state=42, n_init=10)
+            labels = model.fit_predict(x_scaled)
+        else:
+            raise ValueError(f"Unknown space: '{space}'. Usa 'structure' o 'properties'.")
+
+        self.data['cluster'] = labels
+        return labels
+
     def visualize(self, show: bool = True, save_prefix: str | None = None, title: str = 'Chemical Space', heatmap_title: str = 'Tanimoto Heatmap', interactive_mode: bool = False, port: int = 8060, color_by: str | None = None):
-        coords_cols = [col for col in self.data.columns if col.startswith('PCA') or col.startswith('Dim')]
+        # CAMBIO: se agrega 'PCoA' a la detección de columnas de coordenadas.
+        # reduce_dimensions() ahora puede generar columnas con prefijo 'PCoA'
+        # (space='structure', método pca) además de 'PCA' (space='properties')
+        # y 'Dim' (t-SNE/UMAP); antes solo se buscaba 'PCA'/'Dim'.
+        coords_cols = [col for col in self.data.columns if col.startswith('PCA') or col.startswith('PCoA') or col.startswith('Dim')]
         import plotly.express as px
         from molplotly import add_molecules
-        
+        # CAMBIO: el import de Colab ya no es incondicional a nivel de módulo/función.
+        # Antes 'from google.colab.output import serve_kernel_port_as_iframe' se
+        # ejecutaba SIEMPRE al llamar visualize(), y truena con ImportError en
+        # cualquier entorno que no sea Google Colab (Jupyter local, script, servidor).
+        # Ahora se intenta importar y, si falla, se sigue funcionando sin iframe de Colab.
         try:
             from google.colab.output import serve_kernel_port_as_iframe
             _in_colab = True
@@ -136,6 +262,9 @@ class MayaAnalyzer:
                 fig.update_layout(plot_bgcolor='white', paper_bgcolor='white', xaxis=dict(showgrid=False, zeroline=False, mirror=True), yaxis=dict(showgrid=False, zeroline=False, mirror=True))
                 fig = molplotly.add_molecules(fig=fig, df=self.data, smiles_col=self.config.data['smiles_col'], title_col=self.config.data['id_col'], color_col=color_col, caption_cols=self.config.data['activities'])
 
+                # CAMBIO: 'serve_kernel_port_as_iframe' solo se llama si de verdad
+                # estamos en Colab. Fuera de Colab simplemente se corre el server
+                # de Dash normal (fig.run), que es lo que ya hacía la línea siguiente.
                 if _in_colab:
                     serve_kernel_port_as_iframe('localhost')
                 fig.run(port=port)
@@ -170,6 +299,16 @@ class MayaAnalyzer:
             heatmap_figure = visualization.plot_similarity_heatmap(self.sim_matrix, labels=False, output_path=heatmap_path, show=True, title=heatmap_title)
             results.append((fp, 'heatmap', heatmap_figure))
 
+            # CAMBIO: antes, dentro de este mismo 'for fp in fingerprints', el
+            # loop 'for red in reductions' volvía a hacer
+            # self.data = original_data.copy(); self.compute_descriptors(fp_type=fp)
+            # -- es decir, recalculaba TODOS los descriptores fisicoquímicos y
+            # TODOS los fingerprints (incluido MAP4, el más costoso) una vez por
+            # cada método de reducción, aunque el fingerprint 'fp' fuera el mismo.
+            # Con 3 métodos de reducción eso es 3x cómputo redundante por
+            # fingerprint. Ahora se guarda una copia de self.data y self.fps
+            # justo después de compute_descriptors (una sola vez por fp) y se
+            # reutiliza para cada reducción.
             data_with_descriptors = self.data.copy()
             fps_for_fp = self.fps
 
@@ -181,7 +320,11 @@ class MayaAnalyzer:
                 heatmap_title = f'Tanimoto Heatmap - {fp.upper()}'
                 scatter_title = f'{fp.upper()} + {red.upper()}'
                 figs = self.visualize(save_prefix=save_prefix, show=False, title=scatter_title, heatmap_title=heatmap_title, interactive_mode=True, port=port, color_by=color_by)
-                
+                # CAMBIO: antes se guardaba 'metrics' (el módulo importado completo,
+                # from . import ... metrics) en cada tupla de resultados, en vez de
+                # las métricas de evaluación de ESTA reducción (trustworthiness/
+                # correlación) que 'reduce_dimensions' ya calculó y devolvió en
+                # 'reduced'. Ahora se desempaqueta 'reduced' y se guarda lo correcto.
                 coords, results_eval, trust, corr, explained_variance = reduced
                 results.append((fp, red, figs, results_eval))
                 port += 3

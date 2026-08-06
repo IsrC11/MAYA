@@ -18,11 +18,25 @@ def plot_similarity_heatmap(sim_matrix, labels, output_path: str | None = None, 
         plt.close(fig)
     return fig
 
-def plot_scatter(df: pd.DataFrame, x: str, y: str, hue: str | None=None, palette= None, output_path: str | None=None, show: bool = True, title: str | None = None):
-    """Scatter plot for chemical space visualization."""
+def plot_scatter(df: pd.DataFrame, x: str, y: str, hue: str | None=None, palette= None, output_path: str | None=None, show: bool = True, title: str | None = None,
+                  x_var_pct: float | None = None, y_var_pct: float | None = None):
+    """Scatter plot for chemical space visualization.
+
+    Args:
+        x_var_pct, y_var_pct: % de varianza explicada por el eje x/y
+            (analyzer.explained_variance[0]/[1]). Solo aplica para PCA/PCoA
+            -- PASA None (default) para t-SNE/UMAP, que no tienen un
+            equivalente de "varianza explicada" (optimizan preservar
+            vecindades, no varianza), así que no se les debe inventar un %.
+    """
     fig, ax =plt.subplots(figsize=(8, 6))
     sns.scatterplot(data=df, x=x, y=y, hue=hue, palette=palette if hue else None, alpha=0.7, ax=ax)
     ax.set_title(title)
+    # CAMBIO: antes esta función no fijaba xlabel/ylabel -- matplotlib/seaborn
+    # usaban el nombre crudo de la columna (p.ej. "PCA1") sin el % de varianza
+    # que reduce_dimensions() sí calcula pero nunca llegaba hasta aquí.
+    ax.set_xlabel(f"{x} ({x_var_pct*100:.1f}% var.)" if x_var_pct is not None else x)
+    ax.set_ylabel(f"{y} ({y_var_pct*100:.1f}% var.)" if y_var_pct is not None else y)
     if output_path:
         fig.savefig(output_path, dpi=600, bbox_inches="tight")
     plt.close(fig)
@@ -43,7 +57,8 @@ def plot_scatter(df: pd.DataFrame, x: str, y: str, hue: str | None=None, palette
 def plot_pca_biplot(coords_df: pd.DataFrame, loadings, feature_names: list,
                      x_col: str, y_col: str, output_path: str | None = None,
                      show: bool = True, title: str | None = "PCA Biplot",
-                     arrow_scale: float = 1.0):
+                     arrow_scale: float = 1.0,
+                     x_var_pct: float | None = None, y_var_pct: float | None = None):
     """
     Args:
         coords_df: DataFrame con las coordenadas reducidas (debe incluir x_col, y_col).
@@ -79,8 +94,11 @@ def plot_pca_biplot(coords_df: pd.DataFrame, loadings, feature_names: list,
 
     ax.axhline(0, color="grey", lw=0.5, linestyle="--")
     ax.axvline(0, color="grey", lw=0.5, linestyle="--")
-    ax.set_xlabel(x_col)
-    ax.set_ylabel(y_col)
+    # CAMBIO: biplot ya solo aplica a space='properties' con PCA real (nunca
+    # PCoA/t-SNE/UMAP), así que aquí SIEMPRE existen explained_variance --
+    # se agrega el % directo desde analyzer.explained_variance.
+    ax.set_xlabel(f"{x_col} ({x_var_pct*100:.1f}% var.)" if x_var_pct is not None else x_col)
+    ax.set_ylabel(f"{y_col} ({y_var_pct*100:.1f}% var.)" if y_var_pct is not None else y_col)
     ax.set_title(title)
 
     if output_path:
@@ -100,13 +118,16 @@ def plot_pca_biplot(coords_df: pd.DataFrame, loadings, feature_names: list,
 def plot_density_contours(df: pd.DataFrame, x: str, y: str,
                            output_path: str | None = None, show: bool = True,
                            title: str | None = "Densidad del Espacio Químico",
-                           overlay_points: bool = True):
+                           overlay_points: bool = True,
+                           x_var_pct: float | None = None, y_var_pct: float | None = None):
     """
     Args:
         overlay_points: si True, dibuja los puntos individuales debajo de los
             contornos (recomendado -- el KDE solo es un resumen, no reemplaza
             ver los compuestos reales, incluidos los outliers que caen fuera
             de cualquier contorno).
+        x_var_pct, y_var_pct: % de varianza explicada (solo si x/y vienen de
+            PCA/PCoA; deja None para t-SNE/UMAP).
     """
     fig, ax = plt.subplots(figsize=(8, 6))
     if overlay_points:
@@ -114,6 +135,10 @@ def plot_density_contours(df: pd.DataFrame, x: str, y: str,
     sns.kdeplot(data=df, x=x, y=y, fill=True, cmap="magma", alpha=0.6,
                 thresh=0.05, levels=8, ax=ax, zorder=2)
     ax.set_title(title)
+    # CAMBIO: se fijan xlabel/ylabel explícitos con % de varianza cuando aplica
+    # -- antes se dejaban los labels default de seaborn (nombre de columna crudo).
+    ax.set_xlabel(f"{x} ({x_var_pct*100:.1f}% var.)" if x_var_pct is not None else x)
+    ax.set_ylabel(f"{y} ({y_var_pct*100:.1f}% var.)" if y_var_pct is not None else y)
     if output_path:
         fig.savefig(output_path, dpi=600, bbox_inches="tight")
     if show:
@@ -135,7 +160,8 @@ def plot_density_contours(df: pd.DataFrame, x: str, y: str,
 def plot_cluster_hulls(df: pd.DataFrame, x: str, y: str, cluster_col: str = "cluster",
                         output_path: str | None = None, show: bool = True,
                         title: str | None = "Clusters en el Espacio Químico",
-                        palette: str = "tab10"):
+                        palette: str = "tab10",
+                        x_var_pct: float | None = None, y_var_pct: float | None = None):
     fig, ax = plt.subplots(figsize=(8, 6))
     clusters = sorted(df[cluster_col].unique())
     colors = sns.color_palette(palette, n_colors=len(clusters))
@@ -158,8 +184,8 @@ def plot_cluster_hulls(df: pd.DataFrame, x: str, y: str, cluster_col: str = "clu
             except Exception:
                 pass  # puntos colineales u otro caso degenerado: se omite el hull
 
-    ax.set_xlabel(x)
-    ax.set_ylabel(y)
+    ax.set_xlabel(f"{x} ({x_var_pct*100:.1f}% var.)" if x_var_pct is not None else x)
+    ax.set_ylabel(f"{y} ({y_var_pct*100:.1f}% var.)" if y_var_pct is not None else y)
     ax.set_title(title)
     ax.legend(loc="best", fontsize=8)
 

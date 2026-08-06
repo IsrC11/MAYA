@@ -242,7 +242,13 @@ class MayaAnalyzer:
 
         if save_prefix:
             from . import visualization
-            visualization.plot_scatter(self.data, x=x_col, y=y_col, hue=color_col, palette=palette, output_path=f'{save_prefix}_scatter.png', show=False, title=title)
+            # CAMBIO: se pasa el % de varianza explicada (si existe, i.e. PCA/PCoA)
+            # al PNG estático -- antes plot_scatter no recibía esta información y
+            # el eje solo mostraba el nombre crudo de la columna (p.ej. "PCoA1"),
+            # sin el % de varianza que reduce_dimensions() sí calculó.
+            x_var_pct = self.explained_variance[0] if hasattr(self, 'explained_variance') and self.explained_variance is not None and len(self.explained_variance) > 0 else None
+            y_var_pct = self.explained_variance[1] if hasattr(self, 'explained_variance') and self.explained_variance is not None and len(self.explained_variance) > 1 else None
+            visualization.plot_scatter(self.data, x=x_col, y=y_col, hue=color_col, palette=palette, output_path=f'{save_prefix}_scatter.png', show=False, title=title, x_var_pct=x_var_pct, y_var_pct=y_var_pct)
 
         if interactive_mode:
             import molplotly
@@ -251,14 +257,21 @@ class MayaAnalyzer:
             try:
                 fig = px.scatter(self.data, x=x_col, y=y_col, color=color_col, title=title, width=900, height=700, color_continuous_scale=palette)
 
+                # CAMBIO: antes el label estaba hardcodeado como 'PC1'/'PC2' sin
+                # importar cuál era la columna real -- con PCoA (space='structure')
+                # la columna se llama 'PCoA1'/'PCoA2', y mostrar "PC1" ahí es
+                # engañoso (PCoA no es lo mismo que PCA). Ahora se usa x_col/y_col
+                # reales. El % de varianza solo se agrega si existe
+                # self.explained_variance (PCA/PCoA); t-SNE/UMAP se quedan con el
+                # nombre de columna a secas, sin inventarles un % que no aplica.
                 if hasattr(self, 'explained_variance') and self.explained_variance is not None:
-                    x_label = f'PC1({self.explained_variance[0]*100:.2f}%)'
-                    y_label = f'PC2({self.explained_variance[1]*100:.2f}%)'
-                    fig.update_layout(xaxis_title=x_label, yaxis_title=y_label)
+                    x_label = f'{x_col} ({self.explained_variance[0]*100:.2f}% var.)'
+                    y_label = f'{y_col} ({self.explained_variance[1]*100:.2f}% var.)'
                 else:
-                    x_label = 'Dim1'
-                    y_label = 'Dim2'
+                    x_label = x_col
+                    y_label = y_col
 
+                fig.update_layout(xaxis_title=x_label, yaxis_title=y_label)
                 fig.update_layout(plot_bgcolor='white', paper_bgcolor='white', xaxis=dict(showgrid=False, zeroline=False, mirror=True), yaxis=dict(showgrid=False, zeroline=False, mirror=True))
                 fig = molplotly.add_molecules(fig=fig, df=self.data, smiles_col=self.config.data['smiles_col'], title_col=self.config.data['id_col'], color_col=color_col, caption_cols=self.config.data['activities'])
 

@@ -18,7 +18,7 @@ class MayaAnalyzer:
         self.sim_matrix: np.ndarray | None = None
 
     def load_data(self):
-        self.data = utils.load_data(self.config.data_path, id_col=self.config.data['id_col'], smiles_col=self.config.data['smiles_col'])
+        self.data = utils.load_data(self.config.data_path, id_col=self.config.data['id_col'], smiles_col=self.config.data['smiles_col'], canonicalize=False)
         self.data = clean_dataset(self.data, smiles_col=self.config.data['smiles_col'], curation_config=self.config.curation)
         return self.data
 
@@ -170,17 +170,20 @@ class MayaAnalyzer:
             heatmap_path = f"{self.config.viz['output_dir']}/{fp}_heatmap.png"
             heatmap_figure = visualization.plot_similarity_heatmap(self.sim_matrix, labels=False, output_path = heatmap_path, show=True, title=heatmap_title)
             results.append((fp, 'heatmap', heatmap_figure))
+            data_with_descriptors = self.data.copy()
+            fps_for_fp = self.fps
+            
             
             for red in reductions:
-                self.data = original_data.copy()
-                self.compute_descriptors(fp_type=fp)
+                self.data = data_with_descriptors.copy()
+                self.fps = fps_for_fp
                 reduced = self.reduce_dimensions(method=red)
                 save_prefix = f'{fp}_{red}'
                 heatmap_title = f'Tanimoto Heatmap - {fp.upper()}'
                 scatter_title = f'{fp.upper()} + {red.upper()}'
                 figs = self.visualize(save_prefix=save_prefix, show=False, title=scatter_title, heatmap_title=heatmap_title, interactive_mode=True, port=port, color_by=color_by)
                 coords, results_eval, trust, corr, explained_variance = reduced
-                results.append((fp, red, figs, metrics))
+                results.append((fp, red, figs, results_eval))
                 port+=3
         
         return results
